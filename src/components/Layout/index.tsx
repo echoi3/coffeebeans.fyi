@@ -1,6 +1,7 @@
 import { Box } from "@mui/material";
 import React from "react";
 import HeaderFilter from "../HeaderFilter/HeaderFilter";
+import Footer from "./Footer/Footer";
 import Header from "./Header/Header";
 
 // import Header from "./Header/Header";
@@ -11,7 +12,7 @@ interface IProps {
 
 const Layout: React.FunctionComponent<IProps> = ({ children }) => {
   return (
-    <div>
+    <>
       <Header children={undefined} window={undefined} />
       <Box sx={{ mt: 2 }}>
         <HeaderFilter />
@@ -19,7 +20,8 @@ const Layout: React.FunctionComponent<IProps> = ({ children }) => {
       <main>
         <Box sx={{ mt: 2 }}>{children}</Box>
       </main>
-    </div>
+      <Footer />
+    </>
   );
 };
 
