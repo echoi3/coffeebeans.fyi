@@ -1,0 +1,107 @@
+._wrapper {
+  height: 80px;
+  width: 100%;
+  z-index: 9999999;
+  --header_brand-color: var(--ihf-tp-q);
+  background-color: #fff !important;
+  box-shadow: rgb(0 0 0 / 8%) 0 1px 0 !important;
+
+  .header_content {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 80px;
+
+    margin: 0 auto;
+    max-width: var(--page-shell-max-content-width, 1440px);
+    @media screen and (min-width: 300px) {
+      padding-left: var(--ic-zlb-s);
+      padding-right: var(--ic-zlb-s);
+    }
+
+    @media screen and (min-width: 744px) {
+      padding-left: var(--f-fw-z-a-i);
+      padding-right: var(--f-fw-z-a-i);
+    }
+    @media screen and (min-width: 950px) {
+      padding-left: var(--f-fw-z-a-i);
+      padding-right: var(--f-fw-z-a-i);
+    }
+    @media screen and (min-width: 1128px) {
+      padding-left: var(--cy-o-aco);
+      padding-right: var(--cy-o-aco);
+    }
+
+    @media screen and (min-width: 1440px) {
+      padding-left: var(--cy-o-aco);
+      padding-right: var(--cy-o-aco);
+    }
+
+    .header_logo_wrapper {
+      display: flex;
+      align-items: center;
+
+      .desktop_logo {
+        svg {
+          color: var(--ihf-tp-q);
+        }
+        @media screen and (max-width: 600px) {
+          display: none;
+        }
+      }
+      .mobile_logo {
+        width: 100%;
+
+        svg {
+          color: var(--ihf-tp-q);
+          display: inline-block;
+        }
+        @media screen and (max-width: 600px) {
+          display: block;
+        }
+
+        button {
+          color: #222222;
+          font-size: 12px;
+          line-height: 18px;
+          font-weight: bold;
+        }
+      }
+    }
+
+    .header_sarch_box {
+      @media screen and (max-width: 600px) {
+        display: none;
+      }
+    }
+
+    .header_post_profile_wrapper {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      @media screen and (max-width: 600px) {
+        display: none;
+      }
+      .header_post_button {
+        font-size: var(--c-zdwk-p);
+        line-height: var(--j-p-z-kco);
+        font-weight: var(--jx-zk-pv);
+        color: #222222;
+        border-radius: 30px;
+        padding: 12px;
+      }
+      .header_profile_button {
+        background: transparent;
+        border: 0;
+        cursor: pointer;
+        margin: 0;
+        padding: 0;
+        text-align: inherit;
+        background-color: var(--f-mkcy-f);
+        border: 1px solid var(--j-qkgmf);
+        border-radius: 21px;
+        padding: 5px 5px 5px 8px;
+      }
+    }
+  }
+}

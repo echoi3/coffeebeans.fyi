@@ -1,0 +1,60 @@
+._wrapper {
+  ._content {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+
+    margin: 0 auto;
+    max-width: var(--page-shell-max-content-width, 1440px);
+    @media screen and (min-width: 300px) {
+      padding-left: var(--ic-zlb-s);
+      padding-right: var(--ic-zlb-s);
+    }
+
+    @media screen and (min-width: 744px) {
+      padding-left: var(--f-fw-z-a-i);
+      padding-right: var(--f-fw-z-a-i);
+    }
+    @media screen and (min-width: 950px) {
+      padding-left: var(--f-fw-z-a-i);
+      padding-right: var(--f-fw-z-a-i);
+    }
+    @media screen and (min-width: 1128px) {
+      padding-left: var(--cy-o-aco);
+      padding-right: var(--cy-o-aco);
+    }
+
+    @media screen and (min-width: 1440px) {
+      padding-left: var(--cy-o-aco);
+      padding-right: var(--cy-o-aco);
+    }
+
+    ._card_wrapper {
+      grid-auto-rows: minmax(0, 1fr);
+      display: grid;
+      // grid-auto-rows: minmax(min-content,max-content);
+      grid-gap: var(--breakpoint-grid_row-gap, 0)
+        var(--breakpoint-grid_column-gap, 0);
+      grid-template-columns: var(
+        --breakpoint-grid_column-template,
+        repeat(var(--breakpoint-grid_columns, 1), minmax(0, 1fr))
+      );
+
+      @media screen and (min-width: 550px) {
+        --breakpoint-grid_columns: 2;
+      }
+      @media screen and (min-width: 950px) {
+        --breakpoint-grid_columns: 3;
+      }
+
+      @media screen and (min-width: 1128px) {
+        --breakpoint-grid_columns: 4;
+      }
+
+      @media screen and (min-width: 1606px) {
+        --breakpoint-grid_columns: 5;
+      }
+    }
+  }
+}
