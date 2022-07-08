@@ -1,0 +1,40 @@
+.google_signup_wrapper {
+  .google_signup_button {
+    margin-left: 8px;
+    width: 550px;
+    height: 50px;
+    border: "1px solid";
+    border-color: #000000;
+
+    @media screen and (max-width: 599px) {
+      width: 340px;
+    }
+
+    .google_logo_text {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-transform: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      // color: "#c4252c";
+
+      max-width: var(--page-shell-max-content-width, 1440px);
+      @media screen and (min-width: 375px) {
+        padding-left: var(--ic-zlb-s);
+        padding-right: var(--ic-zlb-s);
+      }
+    }
+    .google_logo {
+      width: 25px;
+      height: 25px;
+      margin-bottom: -0.46rem;
+    }
+  }
+}
+
+.login_or_signup {
+  justify-content: center;
+  text-align: center;
+  font-family: "Roboto", sans-serif;
+}
