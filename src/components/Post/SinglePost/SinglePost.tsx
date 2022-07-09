@@ -30,7 +30,6 @@ interface IProps {
 }
 
 const SinglePost: React.FunctionComponent<IProps> = ({ data }) => {
-  console.log(data, "data");
   return (
     <Card className={styles._wrapper}>
       <CardContent className={styles._content}>

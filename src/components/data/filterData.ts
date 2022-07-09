@@ -51,7 +51,7 @@ const filterData: IFilterType[] = [
     title: "Amazing pools",
   },
   { id: 44, image: image4, title: "OMG!" },
-  { id: 55, image: image3, title: "Arctic" },
+  { id: 505, image: image3, title: "Arctic" },
   {
     id: 451,
     image: image1,

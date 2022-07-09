@@ -40,17 +40,3 @@ const Post: React.FunctionComponent = () => {
 };
 
 export default Post;
-
-//  <ProgressiveImage src={el.image} placeholder="">
-//    {(src, loading) => (
-//      <div>
-//        {loading ? (
-//          <FHFSkeleton />
-//        ) : (
-//          <ImageDialog
-
-//          />
-//        )}
-//      </div>
-//    )}
-//  </ProgressiveImage>;
