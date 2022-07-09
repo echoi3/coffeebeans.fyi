@@ -3,6 +3,7 @@ import React from "react";
 import HeaderFilter from "../HeaderFilter/HeaderFilter";
 import Footer from "./Footer/Footer";
 import Header from "./Header/Header";
+import MobileFotter from "./MobileFotter/MobileFotter";
 
 // import Header from "./Header/Header";
 
@@ -12,7 +13,7 @@ interface IProps {
 
 const Layout: React.FunctionComponent<IProps> = ({ children }) => {
   return (
-    <>
+    <MobileFotter>
       <Header children={undefined} window={undefined} />
       <Box sx={{ mt: 2 }}>
         <HeaderFilter />
@@ -21,7 +22,7 @@ const Layout: React.FunctionComponent<IProps> = ({ children }) => {
         <Box sx={{ mt: 2 }}>{children}</Box>
       </main>
       <Footer />
-    </>
+    </MobileFotter>
   );
 };
 

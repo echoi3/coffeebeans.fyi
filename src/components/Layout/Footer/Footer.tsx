@@ -1,7 +1,9 @@
 import { Stack, Typography } from "@mui/material";
 import React from "react";
+import LanguageIcon from "@mui/icons-material/Language";
+import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 import styles from "./Footer.module.scss";
-const Footer = () => {
+const Footer: React.FC = () => {
   return (
     <div className={styles._wrapper}>
       <div className={styles._content}>
@@ -24,7 +26,16 @@ const Footer = () => {
                 </ul>
               </Stack>
             </div>
-            <div>helo</div>
+            <div className={styles.footer_right_wrapper}>
+              <ul>
+                <li style={{ cursor: "pointer" }}>
+                  <LanguageIcon /> English (US)
+                </li>
+                <li>
+                  <CurrencyRupeeIcon /> USD
+                </li>
+              </ul>
+            </div>
           </Stack>
         </div>
       </div>

@@ -150,6 +150,7 @@
 }
 
 body {
+  position: relative;
   font-family: "Circular Std";
   font-size: 14px;
   line-height: 1.43;
@@ -163,3 +164,10 @@ body {
 .css-1aquho2-MuiTabs-indicator {
   background-color: var(--bgxgx) !important;
 }
+
+// .css-11b3ww9-MuiPaper-root-MuiAppBar-root {
+//   box-shadow: none !important;
+//   bottom: 0 !important;
+
+//   // background-color: #1976d2;
+// }
