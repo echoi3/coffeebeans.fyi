@@ -4,9 +4,9 @@
     align-items: center;
     width: 100%;
     height: 100%;
-
     margin: 0 auto;
     max-width: var(--page-shell-max-content-width, 1440px);
+    padding-bottom: 50px;
     @media screen and (min-width: 300px) {
       padding-left: var(--ic-zlb-s);
       padding-right: var(--ic-zlb-s);
