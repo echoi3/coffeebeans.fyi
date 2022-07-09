@@ -1,13 +1,20 @@
-import Layout from "./components/Layout";
-import Post from "./components/Post/Post";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "./components/Home/Home";
+import Signup from "./components/Signup/Signup";
 
 function App() {
   return (
-    <Layout>
-      <div>
-        <Post />
-      </div>
-    </Layout>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/sign-up" element={<Signup />} />
+      </Routes>
+    </BrowserRouter>
+    // <Layout>
+    //   <div>
+    //     <Post />
+    //   </div>
+    // </Layout>
   );
 }
 

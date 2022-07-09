@@ -7,7 +7,6 @@ import {
   List,
   ListItem,
   ListItemAvatar,
-  Avatar,
   ListItemText,
   Typography,
   Divider,
@@ -16,12 +15,11 @@ import { makeStyles } from "@material-ui/core/styles";
 
 import React from "react";
 import styles from "./Signup.module.scss";
-import { blue } from "@mui/material/colors";
-import PersonIcon from "@mui/icons-material/Person";
 import CloseIcon from "@mui/icons-material/Close";
 import Slide from "@mui/material/Slide";
 import { GoogleLogin } from "react-google-login";
-import GoogleLogo from "../../../assets/google.svg";
+// import GoogleLogo from "../../../assets/google.svg";
+import GoogleLogo from "../../assets/google.svg";
 
 const Transition = React.forwardRef<unknown, TransitionProps>((props, ref) => (
   <Slide direction="up" ref={ref} {...props}>
