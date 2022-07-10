@@ -16,13 +16,12 @@ const Footer: React.FC = () => {
                   color="inherit"
                   className={styles.copyright_title}
                 >
-                  &copy; {new Date().getFullYear()} Airbnb, Inc.
+                  &copy; {new Date().getFullYear()} Coffeebeans.fyi, Inc,
                 </Typography>
                 <ul>
                   <li>. Privacy</li>
                   <li>. Terms</li>
-                  <li>. Sitemap</li>
-                  <li>. Destinations</li>
+                  <li>. Contact</li>
                 </ul>
               </Stack>
             </div>
