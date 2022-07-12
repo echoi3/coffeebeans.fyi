@@ -11,7 +11,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import SearchBox from "../../common/SearchBox";
-import Signup from "../../Signup/Signup";
+import LogInOrSignup from "../../LogInOrSignup/LogInOrSignup";
 import logo from "../../../assets/logo.png";
 
 import styles from "./Header.module.scss";
@@ -149,7 +149,7 @@ const Header = (props: { children: any; window: any }) => {
                   >
                     Sign Up
                   </Button>
-                  <Signup
+                  <LogInOrSignup
                     onClose={handleSignupOrLoginClose}
                     open={isSignupOrLoginClicked}
                   />

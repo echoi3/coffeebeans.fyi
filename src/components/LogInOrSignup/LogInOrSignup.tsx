@@ -14,11 +14,10 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 
 import React from "react";
-import styles from "./Signup.module.scss";
+import styles from "./LogInOrSignup.module.scss";
 import CloseIcon from "@mui/icons-material/Close";
 import Slide from "@mui/material/Slide";
 import { GoogleLogin } from "react-google-login";
-// import GoogleLogo from "../../../assets/google.svg";
 import GoogleLogo from "../../assets/google.svg";
 
 const Transition = React.forwardRef<unknown, TransitionProps>((props, ref) => (
@@ -41,7 +40,7 @@ const useDialogStyles = makeStyles((theme) => ({
   },
 }));
 
-const Signup = (props: any) => {
+const LogInOrSignup = (props: any) => {
   const dialogClasses = useDialogStyles();
 
   const { onClose, open } = props;
@@ -135,4 +134,4 @@ const Signup = (props: any) => {
   );
 };
 
-export default Signup;
+export default LogInOrSignup;
