@@ -79,7 +79,8 @@
 
         button {
           color: #222222;
-          font-size: 12px;
+          font-size: var(--c-zdwk-p);
+          text-transform: none;
           line-height: 18px;
           font-weight: bold;
         }
