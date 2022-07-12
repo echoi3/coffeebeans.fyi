@@ -50,16 +50,12 @@ const Signup = (props: any) => {
     onClose();
   };
 
-  const emails = ["username@gmail.com", "user02@gmail.com"];
-
-  console.log("client id", process.env.REACT_APP_GOOGLE_AUTH_CLIENT_ID);
-
   return (
     <Dialog onClose={handleClose} open={open} classes={dialogClasses}>
       <DialogTitle style={{ display: "flex" }}>
         <Grid container>
-          <Grid xs={1}>
-            <CloseIcon style={{ width: "20px" }} />
+          <Grid xs={1} onClick={handleClose}>
+            <CloseIcon className={styles.close_button} />
           </Grid>
           <Grid xs={10}>
             <Typography
