@@ -1,5 +1,6 @@
 import { Box } from "@mui/material";
 import React from "react";
+import EachBean from "../EachBean/EachBean";
 import HeaderFilter from "../HeaderFilter/HeaderFilter";
 import Footer from "./Footer/Footer";
 import Header from "./Header/Header";
@@ -13,16 +14,31 @@ interface IProps {
 
 const Layout: React.FunctionComponent<IProps> = ({ children }) => {
   return (
-    <MobileFotter>
+    // <MobileFotter>
+    <>
       <Header children={undefined} window={undefined} />
+      <Box
+        sx={{
+          mt: 5,
+          "@media screen and (max-width: 600px)": {
+            mt: 0,
+          },
+        }}
+      >
+        {" "}
+      </Box>
+
+      {/* 
       <Box sx={{ mt: 2 }}>
         <HeaderFilter />
-      </Box>
+      </Box> */}
       <main>
         <Box sx={{ mt: 2 }}>{children}</Box>
       </main>
+      <EachBean />
       <Footer />
-    </MobileFotter>
+    </>
+    // </MobileFotter>
   );
 };
 

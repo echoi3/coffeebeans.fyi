@@ -8,7 +8,7 @@ export const sliderImage: IPostType[] = [
   {
     id: 1,
     images: [image1, image2, image3, image4],
-    title: "MV, Maldives",
+    title: "MV, Maldivesdfsdfsdfsdfsdfdfsdfdfsdfdfdsfsdfsdfsdfsd",
     subtitle: "2,864 Kilometers away",
     date: "Aug 13-19",
     price: 500,
