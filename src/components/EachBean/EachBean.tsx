@@ -1,20 +1,18 @@
 import StarIcon from "@mui/icons-material/Star";
 import { Box, Rating, Grid, Typography } from "@mui/material";
-import {
-  Button,
-  Container,
-  TextField,
-  makeStyles,
-  Snackbar,
-} from "@material-ui/core";
+import { Button, Container, TextField, makeStyles, Snackbar } from "@material-ui/core";
 
-import React, { useState } from "react";
-
-import stumptown from "../../assets/stumptown.png";
+import React, { useEffect, useState } from "react";
+import { useLocation, useParams } from "react-router-dom";
 
 import styles from "./EachBean.module.scss";
+import { BeanContent } from "src/types/beanContent";
+import { getBeanContentByBeanName, getBeanContentById } from "src/db/beanContent";
+import { strHasLength } from "src/utils/strings";
+import { COFFEBEANS_FYI_FILES } from "src/constants";
+import HeaderForContent from "../Layout/HeaderForContent/HeaderForContent";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   paper: {
     marginTop: theme.spacing(3),
     display: "flex",
@@ -69,25 +67,33 @@ const EachBean = () => {
   const [value, setValue] = React.useState<number | null>(0);
   const [hover, setHover] = React.useState(-1);
 
+  const [isLoading, setIsLoading] = useState(true);
+  const [_beanContent, setBeanContent] = useState({} as BeanContent);
+
+  const location: any = useLocation();
+
+  console.log("location state", location.state);
+
+  useEffect(() => {
+    const fetchBeanPost = async (): Promise<void> => {
+      const beanContent: BeanContent = await getBeanContentById(location.state);
+
+      setBeanContent(beanContent);
+      setIsLoading(false);
+    };
+    isLoading && fetchBeanPost();
+  }, [isLoading]);
+
   const classes = useStyles();
 
   return (
     <div className={styles._wrapper}>
+      <HeaderForContent children={undefined} window={undefined} />
       <Grid container direction="column" className={styles.beans_wrapper}>
-        <Grid
-          xs={12}
-          sm={12}
-          order={{ xs: 1, sm: 3, md: 3, lg: 3 }}
-          alignItems="center"
-        >
-          <img src={stumptown} className={styles._image}></img>
+        <Grid xs={12} sm={12} order={{ xs: 1, sm: 3, md: 3, lg: 3 }}>
+          <img src={`https://s3.amazonaws.com/${COFFEBEANS_FYI_FILES}/${_beanContent.imageName}`} className={styles._image}></img>
         </Grid>
-        <Grid
-          xs={12}
-          sm={12}
-          className={styles._title}
-          order={{ xs: 2, sm: 1, md: 1, lg: 1 }}
-        >
+        <Grid xs={12} sm={12} className={styles._title} order={{ xs: 2, sm: 1, md: 1, lg: 1 }}>
           <Typography
             style={{
               fontWeight: "600",
@@ -95,39 +101,40 @@ const EachBean = () => {
             }}
             display="block"
           >
-            Monorail Espresso Blend by Monorail Espresso asdasdasdassdfdfsdf
+            {_beanContent.beanName} by {_beanContent.companyName}
           </Typography>
         </Grid>
-        <Grid
-          container
-          order={{ xs: 3, sm: 2, md: 2, lg: 2 }}
-          direction="column"
-          className={styles.ratings_and_review}
-        >
+        <Grid container order={{ xs: 3, sm: 2, md: 2, lg: 2 }} direction="column" className={styles.ratings_and_review}>
           <Grid xs={12} sm={12}>
             <div style={{ display: "flex" }}>
-              <StarIcon style={{ marginTop: "-1.9px", width: "20px" }} />{" "}
+              {strHasLength(_beanContent.rating) ? (
+                <>
+                  <StarIcon style={{ marginTop: "-1.9px", width: "20px" }} />{" "}
+                  <Typography
+                    style={{
+                      fontSize: "15px",
+                      fontWeight: "600",
+                      marginRight: "7px",
+                    }}
+                  >
+                    {_beanContent.rating} ·
+                  </Typography>
+                </>
+              ) : (
+                <div></div>
+              )}
+
               <Typography
                 style={{
                   fontSize: "15px",
                   fontWeight: "600",
-                  marginRight: "12px",
+                  marginRight: "10px",
+                  marginLeft: "3px",
                 }}
               >
-                4.9 ·
+                {_beanContent.numReviews} Reviews ·
               </Typography>
-              <Typography
-                style={{
-                  fontSize: "15px",
-                  fontWeight: "600",
-                  marginRight: "12px",
-                }}
-              >
-                21 Reviews ·
-              </Typography>
-              <Typography style={{ fontSize: "15px", fontWeight: "600" }}>
-                Seattle, WA, USA
-              </Typography>
+              <Typography style={{ fontSize: "15px", fontWeight: "600" }}>{_beanContent.headquarter}</Typography>
             </div>
           </Grid>
         </Grid>
@@ -135,24 +142,32 @@ const EachBean = () => {
       <Grid container direction="row" className={styles.comments_wrapper}>
         <Grid xs={12} sm={12}>
           <div className={styles.desktop_commentHeader}>
-            <StarIcon style={{ marginTop: "2px", width: "30px" }} />{" "}
+            {strHasLength(_beanContent.rating) ? (
+              <>
+                <StarIcon style={{ marginTop: "2px", width: "30px" }} />{" "}
+                <Typography
+                  style={{
+                    fontSize: "20px",
+                    fontWeight: "600",
+                    marginRight: "9px",
+                  }}
+                >
+                  {_beanContent.rating} ·
+                </Typography>
+              </>
+            ) : (
+              <div></div>
+            )}
+
             <Typography
               style={{
                 fontSize: "20px",
                 fontWeight: "600",
                 marginRight: "12px",
+                marginLeft: "3px",
               }}
             >
-              4.9 ·
-            </Typography>
-            <Typography
-              style={{
-                fontSize: "20px",
-                fontWeight: "600",
-                marginRight: "12px",
-              }}
-            >
-              21 Reviews
+              {_beanContent.numReviews} Reviews
             </Typography>
           </div>
         </Grid>
@@ -160,9 +175,7 @@ const EachBean = () => {
           <Grid xs={12} sm={11.6} className={styles.rating_wrapper}>
             <Grid container>
               <Grid xs={12} sm={12}>
-                <Typography className={styles.review_title}>
-                  Add Your review
-                </Typography>
+                <Typography className={styles.review_title}>Add Your review</Typography>
               </Grid>
               <Grid xs={12} sm={12}>
                 <Box
@@ -189,33 +202,14 @@ const EachBean = () => {
                     onChangeActive={(event, newHover) => {
                       setHover(newHover);
                     }}
-                    emptyIcon={
-                      <StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />
-                    }
+                    emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
                   />
-                  {value !== null && (
-                    <Box sx={{ ml: 2 }}>
-                      {labels[hover !== -1 ? hover : value]}
-                    </Box>
-                  )}{" "}
+                  {value !== null && <Box sx={{ ml: 2 }}>{labels[hover !== -1 ? hover : value]}</Box>}{" "}
                 </Box>
               </Grid>
               <form className={classes.form}>
-                <TextField
-                  variant="outlined"
-                  margin="normal"
-                  fullWidth
-                  label="What did you think of the coffee bean? (optional)"
-                  multiline
-                  value=""
-                  rows={4}
-                />
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  className={classes.submit}
-                >
+                <TextField variant="outlined" margin="normal" fullWidth label="What did you think of the coffee bean? (optional)" multiline value="" rows={4} />
+                <Button type="submit" fullWidth variant="contained" className={classes.submit}>
                   Submit
                 </Button>
                 {/* <Snackbar
@@ -238,14 +232,9 @@ const EachBean = () => {
             <Typography className={styles.first_name}>Firstname</Typography>
             <Typography className={styles.date}>July 2022</Typography>
             <Typography className={styles.comment_content}>
-              Amazing coffee Amazing coffeeAmazing coffeeAmazing coffeeAmazing
-              coffeeAmazing coffeeAmazing coffeev Amazing coffee Amazing
-              coffeeAmazing coffeeAmazing coffeeAmazing coffeeAmazing
-              coffeeAmazing coffeev Amazing coffee Amazing coffeeAmazing
-              coffeeAmazing coffeeAmazing coffeeAmazing coffeeAmazing coffeev
-              Amazing coffee Amazing coffeeAmazing coffeeAmazing coffeeAmazing
-              coffeeAmazing coffeeAmazing coffeev Amazing coffee Amazing
-              coffeeAmazing coffeeAmazing coffeeAmazing coffeeAmazing
+              Amazing coffee Amazing coffeeAmazing coffeeAmazing coffeeAmazing coffeeAmazing coffeeAmazing coffeev Amazing coffee Amazing coffeeAmazing coffeeAmazing coffeeAmazing
+              coffeeAmazing coffeeAmazing coffeev Amazing coffee Amazing coffeeAmazing coffeeAmazing coffeeAmazing coffeeAmazing coffeeAmazing coffeev Amazing coffee Amazing
+              coffeeAmazing coffeeAmazing coffeeAmazing coffeeAmazing coffeeAmazing coffeev Amazing coffee Amazing coffeeAmazing coffeeAmazing coffeeAmazing coffeeAmazing
               coffeeAmazing coffeev
             </Typography>
           </Grid>
@@ -253,21 +242,16 @@ const EachBean = () => {
             <Typography className={styles.first_name}>Firstname</Typography>
             <Typography className={styles.date}>July 2022</Typography>
             <Typography className={styles.comment_content}>
-              Amazing coffee Amazing coffeeAmazing coffeeAmazing coffeeAmazing
-              coffeeAmazing coffeeAmazing coffeev Amazing coffee Amazing coff
+              Amazing coffee Amazing coffeeAmazing coffeeAmazing coffeeAmazing coffeeAmazing coffeeAmazing coffeev Amazing coffee Amazing coff
             </Typography>
           </Grid>
           <Grid xs={12} sm={5.7} className={styles.each_comment_wrapper}>
             <Typography className={styles.first_name}>Firstname</Typography>
             <Typography className={styles.date}>July 2022</Typography>
             <Typography className={styles.comment_content}>
-              Amazing coffee Amazing coffeeAmazing coffeeAmazing coffeeAmazing
-              coffeeAmazing coffeeAmazing coffeev Amazing coffee Amazing coff
-              coffeeAmazing coffeeAmazing coffeev Amazing coffee Amazing coff
-              coffeeAmazing coffeeAmazing coffeev Amazing coffee Amazing coff
-              coffeeAmazing coffeeAmazing coffeev Amazing coffee Amazing coff
-              coffeeAmazing coffeeAmazing coffeev Amazing coffee Amazing coff
-              coffeeAmazing coffeeAmazing coffeev Amazing coffee Amazing coff
+              Amazing coffee Amazing coffeeAmazing coffeeAmazing coffeeAmazing coffeeAmazing coffeeAmazing coffeev Amazing coffee Amazing coff coffeeAmazing coffeeAmazing coffeev
+              Amazing coffee Amazing coff coffeeAmazing coffeeAmazing coffeev Amazing coffee Amazing coff coffeeAmazing coffeeAmazing coffeev Amazing coffee Amazing coff
+              coffeeAmazing coffeeAmazing coffeev Amazing coffee Amazing coff coffeeAmazing coffeeAmazing coffeev Amazing coffee Amazing coff
             </Typography>
           </Grid>
         </Grid>

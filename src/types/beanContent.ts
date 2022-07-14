@@ -2,15 +2,15 @@ import { Comment } from "./comment";
 
 export interface BeanContent {
   uuid: string;
-  content: string;
   beanName: string;
   companyName: string;
-  userName: string;
-  email: string;
+  userId: string; // uuid of the user who posts a bean
   timeStamp: string;
   imageName: string;
-  comments?: Comment[];
-  commentedUsers: string[]; //uuids of users who commented on the bean
-  rating: string;
+  headquarter: string;
   numReviews: string;
+  comments?: Comment[];
+  commentedUsers?: string[]; //uuids of users who commented on the bean
+  rating?: string;
+  content?: string;
 }

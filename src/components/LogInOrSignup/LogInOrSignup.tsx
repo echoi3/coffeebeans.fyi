@@ -1,24 +1,17 @@
 import { TransitionProps } from "@material-ui/core/transitions";
-import {
-  Button,
-  Dialog,
-  DialogTitle,
-  Grid,
-  List,
-  ListItem,
-  ListItemAvatar,
-  ListItemText,
-  Typography,
-  Divider,
-} from "@mui/material";
+import { Button, CardActions, Dialog, DialogTitle, Grid, List, ListItem, ListItemAvatar, ListItemText, Typography, Divider } from "@mui/material";
 import { makeStyles } from "@material-ui/core/styles";
 
 import React from "react";
 import styles from "./LogInOrSignup.module.scss";
 import CloseIcon from "@mui/icons-material/Close";
 import Slide from "@mui/material/Slide";
-import { GoogleLogin } from "react-google-login";
+// import { GoogleLogin } from "react-google-login";
 import GoogleLogo from "../../assets/google.svg";
+import { createAccount, getAllAccountEmails } from "../../db/account";
+import { refreshTokenSetup } from "../../utils/auth";
+
+import { GoogleLogin, useGoogleLogin } from "@react-oauth/google";
 
 const Transition = React.forwardRef<unknown, TransitionProps>((props, ref) => (
   <Slide direction="up" ref={ref} {...props}>
@@ -26,11 +19,35 @@ const Transition = React.forwardRef<unknown, TransitionProps>((props, ref) => (
   </Slide>
 ));
 
-const responseGoogle = (response: any) => {
-  console.log(response);
+const handleSignUpSuccess = async (res: any) => {
+  console.log("Current response", res);
+  localStorage.setItem("user", res?.profileObj?.name);
+  localStorage.setItem("email", res?.profileObj?.email);
+
+  const { email, name } = res?.profileObj;
+  const [firstName, lastName] = name.split(" ");
+
+  const allUserEmails = await getAllAccountEmails();
+
+  if (!allUserEmails.includes(email)) {
+    await createAccount({ email, firstName, lastName });
+  }
+
+  try {
+    await fetch("/api/sign-up", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({ email }),
+    });
+  } catch (e) {
+    console.log("Error", e);
+  }
+  refreshTokenSetup(res);
 };
 
-const useDialogStyles = makeStyles((theme) => ({
+const useDialogStyles = makeStyles(theme => ({
   paper: {
     minWidth: "100vw",
     [theme?.breakpoints.up("sm")]: {
@@ -44,6 +61,55 @@ const LogInOrSignup = (props: any) => {
   const dialogClasses = useDialogStyles();
 
   const { onClose, open } = props;
+
+  const fetchUserInfo = async (token: string) => {
+    const response = await fetch("https://www.googleapis.com/oauth2/v3/userinfo", {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    return await response.json();
+  };
+
+  const login = useGoogleLogin({
+    onSuccess: async res => {
+      console.log(res);
+      console.log("Current response", res);
+
+      const response = await fetchUserInfo(res?.access_token);
+      console.log("User response", response);
+
+      const firstName = response?.given_name;
+      const lastName = response?.family_name;
+      const email = response?.email;
+
+      localStorage.setItem("userFirstname", firstName);
+      localStorage.setItem("email", email);
+
+      const allUserEmails = await getAllAccountEmails();
+
+      if (!allUserEmails.includes(email)) {
+        await createAccount({ email, firstName, lastName });
+      }
+
+      try {
+        await fetch("/api/sign-up", {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify({ email }),
+        });
+      } catch (e) {
+        console.log("Error", e);
+      }
+      // refreshTokenSetup(res);
+    },
+  });
 
   const handleClose = () => {
     onClose();
@@ -82,11 +148,36 @@ const LogInOrSignup = (props: any) => {
       <List className={styles.google_signup_wrapper}>
         <ListItem>
           <ListItemAvatar>
-            <GoogleLogin
+            <Grid container direction="column" justifyContent="center" alignItems="center" textAlign="center">
+              <Grid xs={12}>
+                <Button
+                  onClick={() => login()}
+                  variant="text"
+                  color="inherit"
+                  className={styles.google_signup_button}
+                  style={{
+                    border: "1.2px solid",
+                    borderRadius: "0.7rem",
+                  }}
+                >
+                  <Grid container>
+                    {" "}
+                    <Grid xs={1}>
+                      <img src={GoogleLogo} alt="google sign up" className={styles.google_logo} />
+                    </Grid>
+                    <Grid xs={11} className={styles.google_logo_text}>
+                      {" "}
+                      Continue with Google
+                    </Grid>
+                  </Grid>
+                </Button>
+              </Grid>
+            </Grid>
+            {/* <GoogleLogin
               clientId={`${process.env.REACT_APP_GOOGLE_AUTH_CLIENT_ID}`}
               buttonText="Continue with Google"
-              onSuccess={responseGoogle}
-              onFailure={responseGoogle}
+              onSuccess={handleSignUpSuccess}
+              onFailure={err => console.log("Login Failed with Error,", err)}
               cookiePolicy={"single_host_origin"}
               style={{ marginLeft: "auto" }}
               render={(renderProps: any) => (
@@ -105,11 +196,7 @@ const LogInOrSignup = (props: any) => {
                     <Grid container>
                       {" "}
                       <Grid xs={1}>
-                        <img
-                          src={GoogleLogo}
-                          alt="google sign up"
-                          className={styles.google_logo}
-                        />
+                        <img src={GoogleLogo} alt="google sign up" className={styles.google_logo} />
                       </Grid>
                       <Grid xs={11} className={styles.google_logo_text}>
                         {" "}
@@ -119,10 +206,23 @@ const LogInOrSignup = (props: any) => {
                   </Button>
                 </>
               )}
-            />
+            /> */}
+            {/* <div className={styles.google_signup_button}>
+              <GoogleLogin
+                onSuccess={handleSignUpSuccess}
+                onError={() => {
+                  console.log("Login Failed");
+                }}
+                size="large"
+                width="500px"
+                text="continue_with"
+                logo_alignment="left"
+              />
+            </div> */}
           </ListItemAvatar>
           <ListItemText />
         </ListItem>
+
         {/* <ListItem autoFocus button>
           <ListItemAvatar>
             <Avatar></Avatar>

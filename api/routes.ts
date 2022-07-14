@@ -11,7 +11,7 @@ dotenv.config({ path: `${__dirname}/../.env` });
 
 const router = express.Router();
 
-router.get("/api/hello", (req: VercelRequest, res: VercelResponse, next) => {
+router.get("/api/hello", (req: any, res: any, next) => {
   res.json("World");
 });
 
@@ -34,7 +34,7 @@ router.get("/api/hello", (req: VercelRequest, res: VercelResponse, next) => {
 //     });
 // });
 
-router.post("/api/join-waitlist", async (req: VercelRequest, res: VercelResponse, next) => {
+router.post("/api/sign-up", async (req: any, res: any, next) => {
   const sgMail = require("@sendgrid/mail");
   sgMail.setApiKey(process.env.REACT_APP_SENDGRID_API_KEY);
   const msg = {
@@ -43,18 +43,18 @@ router.post("/api/join-waitlist", async (req: VercelRequest, res: VercelResponse
       email: "eric.choi@coffeebeans.fyi", // Change to your verified sender
       name: "Eric from coffeebeans.fyi",
     },
-    templateId: "d-c436dc40b7e84981bab4517e7f972476",
+    templateId: "d-d5b46af795a4433db542bfa2f30f6b80",
     personalizations: [
       {
         to: "eric.choi@coffeebeans.fyi",
         dynamic_template_data: {
-          subject: `${req.body.email} signed up! Fav bean is ${req.body.favoriteBean}`,
+          subject: `${req.body.email} signed up!`,
         },
       },
       {
         to: req.body.email,
         dynamic_template_data: {
-          subject: `You're On The Waitlist For coffeebeans.fyi! Here's our plan`,
+          subject: `Thank you for signing up! Here's how you can use coffeebeans.fyi`,
         },
       },
     ],
