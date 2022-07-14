@@ -1,25 +1,32 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./components/Home/Home";
-import Signup from "./components/Signup/Signup";
+import LogInOrSignup from "./components/LogInOrSignup/LogInOrSignup";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import { BaseRoutes } from "./routes/constants";
+import EachBean from "./components/EachBean/EachBean";
+import Header from "./components/Layout/Header/Header";
 
 function App() {
   return (
     <BrowserRouter>
-      <div
-        style={{
-          position: "relative",
-          maxWidth: "100vw",
-          overflowX: "hidden",
-          width: "100vw",
-          minHeight: "100vh",
-          maxHeight: "100%",
-        }}
-      >
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/sign-up" element={<Signup />} />
-        </Routes>
-      </div>
+      <GoogleOAuthProvider clientId={`${process.env.REACT_APP_GOOGLE_AUTH_CLIENT_ID}`}>
+        <div
+          style={{
+            position: "relative",
+            maxWidth: "100vw",
+            overflowX: "hidden",
+            width: "100vw",
+            minHeight: "100vh",
+            maxHeight: "100%",
+          }}
+        >
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path={BaseRoutes.Sign_Up} element={<LogInOrSignup />} />
+            <Route path={`${BaseRoutes.BeanContent}/:beanName`} element={<EachBean />} />
+          </Routes>
+        </div>
+      </GoogleOAuthProvider>
     </BrowserRouter>
     // <Layout>
     //   <div>

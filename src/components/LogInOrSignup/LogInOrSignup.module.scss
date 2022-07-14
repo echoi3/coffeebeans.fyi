@@ -1,13 +1,15 @@
 .google_signup_wrapper {
+  max-width: 100vw;
+  width: 100vw;
+  overflow-x: hidden;
   .google_signup_button {
     margin-left: 8px;
     width: 550px;
     height: 50px;
-    border: "1px solid";
-    border-color: #000000;
 
     @media screen and (max-width: 599px) {
-      width: 340px;
+      width: 88vw;
+      margin-right: 8px;
     }
 
     .google_logo_text {

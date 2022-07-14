@@ -15,7 +15,7 @@ import SearchBox from "../../common/SearchBox";
 import LogInOrSignup from "../../LogInOrSignup/LogInOrSignup";
 import logo from "../../../assets/logo.png";
 
-import styles from "./Header.module.scss";
+import styles from "./HeaderForContent.module.scss";
 import { BaseRoutes } from "src/routes/constants";
 
 // function ElevationScroll(props: { children: any; window: any }) {
@@ -30,8 +30,9 @@ import { BaseRoutes } from "src/routes/constants";
 //   });
 // }
 
-const Header = (props: { children: any; window: any }) => {
+const HeaderForContent = (props: { children: any; window: any }) => {
   let navigate = useNavigate();
+
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
 
@@ -219,4 +220,4 @@ const Header = (props: { children: any; window: any }) => {
   );
 };
 
-export default Header;
+export default HeaderForContent;

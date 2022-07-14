@@ -1,0 +1,16 @@
+import { Comment } from "./comment";
+
+export interface BeanContent {
+  uuid: string;
+  beanName: string;
+  companyName: string;
+  userId: string; // uuid of the user who posts a bean
+  timeStamp: string;
+  imageName: string;
+  headquarter: string;
+  numReviews: string;
+  comments?: Comment[];
+  commentedUsers?: string[]; //uuids of users who commented on the bean
+  rating?: string;
+  content?: string;
+}

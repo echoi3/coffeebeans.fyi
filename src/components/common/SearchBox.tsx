@@ -14,7 +14,7 @@ const Search = styled("div")(({ theme }) => ({
 }));
 
 const SearchIconWrapper = styled("div")(({ theme }) => ({
-  backgroundColor: "var(--header_brand-color,var(--ihf-tp-q))",
+  backgroundColor: "#c4252c",
   borderRadius: "50%",
   padding: "7px",
   position: "absolute",
@@ -40,15 +40,13 @@ const SearchBox: React.FunctionComponent = () => {
   return (
     <>
       <Search>
-        <StyledInputBase
-          placeholder="Search…"
-          inputProps={{ "aria-label": "search" }}
-        />
+        <StyledInputBase placeholder="Search…" inputProps={{ "aria-label": "search" }} />
         <SearchIconWrapper>
           <SearchIcon style={{ fontSize: "20px" }} />
         </SearchIconWrapper>
       </Search>
       {/* </Toolbar> */}
+      {/* <Typography style={{ color: "#c4252c", fontWeight: "600", fontSize: "20px", paddingTop: "23px" }}>Everything About Coffee Beans</Typography> */}
     </>
   );
 };
