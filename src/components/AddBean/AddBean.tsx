@@ -101,7 +101,7 @@ const AddBean = () => {
   const [open, setOpen] = useState(false);
   const [isError, setIsError] = useState(false);
 
-  const userEmail = localStorage?.getItem("email") ?? "";
+  const userEmail = localStorage?.getItem("userEmail") ?? "";
 
   const classes = useStyles();
 

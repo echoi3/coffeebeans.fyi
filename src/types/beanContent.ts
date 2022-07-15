@@ -11,7 +11,7 @@ export interface BeanContent {
   headquarter?: string;
   numReviews: string;
   comments?: Comment[];
-  commentedUsers?: string[]; //uuids of users who commented on the bean
+  commentedUsers?: string[]; //emails of users who commented on the bean
   avgRating?: string;
   ratings?: string[];
   content?: string;

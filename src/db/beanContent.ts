@@ -6,6 +6,7 @@ import { CONTENTS_TABLE } from "src/constants";
 import { BeanContent } from "src/types/beanContent";
 import { getDynamoDB } from "src/utils/aws/dynamodb";
 import { strHasLength } from "src/utils/strings";
+import { Comment } from "src/types/comment";
 
 export const getAllBeanContents = async (): Promise<BeanContent[]> => {
   const dynamoDb = getDynamoDB();
@@ -63,6 +64,36 @@ export const createBeanContent = async (content: Partial<BeanContent>): Promise<
 
   try {
     return await dynamoDb.put(params).promise();
+  } catch (error) {
+    throw error; // bubble up other error types
+  }
+};
+
+export const addRatingAndCommentOnBeanContent = async (
+  beanContentUUID: string,
+  newComments: Comment[],
+  newRatings: string[],
+  newAvgRating: string,
+  newNumReviews: string,
+): Promise<any> => {
+  const dynamoDb = getDynamoDB();
+
+  const params: DynamoDB.DocumentClient.UpdateItemInput = {
+    TableName: CONTENTS_TABLE,
+    Key: {
+      uuid: beanContentUUID,
+    },
+    UpdateExpression: "SET comments = :newComments, ratings = :newRatings, avgRating = :newAvgRating, numReviews = :newNumReviews",
+    ExpressionAttributeValues: {
+      ":newComments": newComments,
+      ":newRatings": newRatings,
+      ":newAvgRating": newAvgRating,
+      ":newNumReviews": newNumReviews,
+    },
+  };
+
+  try {
+    return await dynamoDb.update(params).promise();
   } catch (error) {
     throw error; // bubble up other error types
   }
