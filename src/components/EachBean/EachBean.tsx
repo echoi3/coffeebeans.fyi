@@ -7,10 +7,13 @@ import { useLocation, useParams } from "react-router-dom";
 
 import styles from "./EachBean.module.scss";
 import { BeanContent } from "src/types/beanContent";
-import { getBeanContentByBeanName, getBeanContentById } from "src/db/beanContent";
+import { addRatingAndCommentOnBeanContent, getBeanContentByBeanName, getBeanContentById } from "src/db/beanContent";
 import { strHasLength } from "src/utils/strings";
 import { COFFEBEANS_FYI_FILES } from "src/constants";
 import HeaderForContent from "../Layout/HeaderForContent/HeaderForContent";
+import { Comment } from "src/types/comment";
+import { addCommentOnAccount, getUserCommentsById } from "src/db/account";
+import { listHasLength } from "src/utils/list";
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -64,11 +67,23 @@ function getLabelText(value: number) {
 }
 
 const EachBean = () => {
-  const [value, setValue] = React.useState<number | null>(0);
+  const [rating, setRating] = React.useState<number | null>(0);
   const [hover, setHover] = React.useState(-1);
 
   const [isLoading, setIsLoading] = useState(true);
   const [_beanContent, setBeanContent] = useState({} as BeanContent);
+
+  const [comment, setComment] = useState("");
+  const [_comments, setComments] = useState([] as Comment[]);
+  const [_avgRating, setAvgRating] = useState("");
+  const [_numReviews, setNumReviews] = useState("");
+
+  const [open, setOpen] = useState(false);
+  const [isError, setIsError] = useState(false);
+
+  const userEmail = localStorage?.getItem("userEmail") ?? "";
+  const userFirstName = localStorage?.getItem("userFirstname") ?? "";
+  const userUUID = localStorage?.getItem("userUUID") ?? "";
 
   const location: any = useLocation();
 
@@ -77,12 +92,68 @@ const EachBean = () => {
       const beanContent: BeanContent = await getBeanContentById(location.state);
 
       setBeanContent(beanContent);
+      setComments((beanContent?.comments as Comment[]) ?? []);
+      setAvgRating((beanContent?.avgRating as string) ?? "");
+      setNumReviews((beanContent?.numReviews as string) ?? "0");
       setIsLoading(false);
     };
     isLoading && fetchBeanPost();
   }, [isLoading]);
 
   const classes = useStyles();
+
+  const handleSubmit = async e => {
+    e.preventDefault();
+
+    if ((rating as number) > 0) {
+      const ratingString = rating?.toString();
+      setIsError(false);
+      setOpen(true);
+
+      const date = new Date();
+      const year = date.getUTCFullYear().toString();
+      const monthName = date
+        .toLocaleString("default", {
+          month: "long",
+        })
+        .toString();
+
+      const commentContent: Comment = {
+        id: _beanContent.uuid,
+        userName: userFirstName,
+        timeStamp: monthName + " " + year,
+        rating: ratingString as string,
+        comment,
+      };
+
+      const userComments = await getUserCommentsById(userUUID);
+
+      const comments = [...((_beanContent?.comments as Comment[]) ?? []), commentContent];
+      setComments(comments);
+
+      const ratings = [...((_beanContent?.ratings as String[]) ?? []), ratingString] as string[];
+      const avgRating = (ratings.reduce((acc, val) => acc + Number(val), 0) / ratings.length) as number;
+      const avgRatingString = avgRating.toString();
+      setAvgRating(avgRatingString);
+
+      const numReviews = strHasLength(commentContent.comment) ? String(Number(_beanContent.numReviews) + 1) : _beanContent.numReviews;
+      setNumReviews(numReviews);
+
+      addRatingAndCommentOnBeanContent(_beanContent.uuid, comments, ratings, avgRatingString, numReviews);
+      addCommentOnAccount(userUUID, [...userComments, commentContent]);
+
+      setComment("");
+      setRating(0);
+      setIsLoading(true);
+    } else {
+      setIsError(true);
+      setOpen(true);
+    }
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   return (
     <div className={styles._wrapper}>
@@ -115,7 +186,7 @@ const EachBean = () => {
                       marginRight: "7px",
                     }}
                   >
-                    {_beanContent.avgRating} ·
+                    {Number(_avgRating).toFixed(2)} ·
                   </Typography>
                 </>
               ) : (
@@ -130,7 +201,7 @@ const EachBean = () => {
                   marginLeft: "3px",
                 }}
               >
-                {_beanContent.numReviews} Reviews ·
+                {_numReviews} Reviews ·
               </Typography>
               <Typography style={{ fontSize: "15px", fontWeight: "600" }}>{_beanContent.headquarter}</Typography>
             </div>
@@ -150,7 +221,7 @@ const EachBean = () => {
                     marginRight: "9px",
                   }}
                 >
-                  {_beanContent.avgRating} ·
+                  {Number(_avgRating).toFixed(2)} ·
                 </Typography>
               </>
             ) : (
@@ -165,93 +236,95 @@ const EachBean = () => {
                 marginLeft: "3px",
               }}
             >
-              {_beanContent.numReviews} Reviews
+              {_numReviews} Reviews
             </Typography>
           </div>
         </Grid>
-        <Grid container direction="row">
-          <Grid xs={12} sm={11.6} className={styles.rating_wrapper}>
-            <Grid container>
-              <Grid xs={12} sm={12}>
-                <Typography className={styles.review_title}>Add Your review</Typography>
-              </Grid>
-              <Grid xs={12} sm={12}>
-                <Box
-                  sx={{
-                    width: 200,
-                    display: "flex",
-                    alignItems: "center",
-                  }}
-                >
-                  <Rating
-                    name="text-feedback"
-                    value={value}
-                    precision={0.5}
-                    getLabelText={getLabelText}
+        {!_beanContent?.commentedUsers?.includes(userEmail) ? (
+          <Grid container direction="row">
+            <Grid xs={12} sm={11.6} className={styles.rating_wrapper}>
+              <Grid container>
+                <Grid xs={12} sm={12}>
+                  <Typography className={styles.review_title}>Add Your review</Typography>
+                </Grid>
+                <Grid xs={12} sm={12}>
+                  <Box
                     sx={{
-                      fontSize: "30px",
-                      "@media screen and (max-width: 600px)": {
-                        fontSize: "50px",
+                      width: 200,
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Rating
+                      name="text-feedback"
+                      value={rating}
+                      precision={0.5}
+                      getLabelText={getLabelText}
+                      sx={{
+                        fontSize: "30px",
+                        "@media screen and (max-width: 600px)": {
+                          fontSize: "50px",
+                        },
+                      }}
+                      onChange={(event, newValue) => {
+                        setRating(newValue);
+                      }}
+                      onChangeActive={(event, newHover) => {
+                        setHover(newHover);
+                      }}
+                      emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
+                    />
+                    {rating !== null && <Box sx={{ ml: 2 }}>{labels[hover !== -1 ? hover : rating]}</Box>}{" "}
+                  </Box>
+                </Grid>
+                <form className={classes.form} onSubmit={handleSubmit}>
+                  <TextField
+                    variant="outlined"
+                    margin="normal"
+                    fullWidth
+                    label="What did you think of the coffee bean? (optional)"
+                    multiline
+                    value={comment}
+                    rows={4}
+                    onInput={e => setComment((e?.target as HTMLInputElement).value)}
+                  />
+                  <Button type="submit" fullWidth variant="contained" className={classes.submit}>
+                    Submit
+                  </Button>
+                  <Snackbar
+                    open={open}
+                    autoHideDuration={6000}
+                    onClose={handleClose}
+                    ContentProps={{
+                      classes: {
+                        root: classes.root,
                       },
                     }}
-                    onChange={(event, newValue) => {
-                      setValue(newValue);
-                    }}
-                    onChangeActive={(event, newHover) => {
-                      setHover(newHover);
-                    }}
-                    emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
-                  />
-                  {value !== null && <Box sx={{ ml: 2 }}>{labels[hover !== -1 ? hover : value]}</Box>}{" "}
-                </Box>
+                    message={isError ? "Please provide a rating :)" : "Love it! Thank you :)"}
+                  ></Snackbar>
+                </form>
               </Grid>
-              <form className={classes.form}>
-                <TextField variant="outlined" margin="normal" fullWidth label="What did you think of the coffee bean? (optional)" multiline value="" rows={4} />
-                <Button type="submit" fullWidth variant="contained" className={classes.submit}>
-                  Submit
-                </Button>
-                {/* <Snackbar
-              open={open}
-              autoHideDuration={6000}
-              onClose={handleClose}
-              ContentProps={{
-                classes: {
-                  root: classes.root,
-                },
-              }}
-              message="Love it! Thank you :)"
-            ></Snackbar> */}
-              </form>
             </Grid>
           </Grid>
-        </Grid>
+        ) : (
+          <div></div>
+        )}
         <Grid container>
-          <Grid xs={12} sm={5.7} className={styles.each_comment_wrapper}>
-            <Typography className={styles.first_name}>Firstname</Typography>
-            <Typography className={styles.date}>July 2022</Typography>
-            <Typography className={styles.comment_content}>
-              Amazing coffee Amazing coffeeAmazing coffeeAmazing coffeeAmazing coffeeAmazing coffeeAmazing coffeev Amazing coffee Amazing coffeeAmazing coffeeAmazing coffeeAmazing
-              coffeeAmazing coffeeAmazing coffeev Amazing coffee Amazing coffeeAmazing coffeeAmazing coffeeAmazing coffeeAmazing coffeeAmazing coffeev Amazing coffee Amazing
-              coffeeAmazing coffeeAmazing coffeeAmazing coffeeAmazing coffeeAmazing coffeev Amazing coffee Amazing coffeeAmazing coffeeAmazing coffeeAmazing coffeeAmazing
-              coffeeAmazing coffeev
-            </Typography>
-          </Grid>
-          <Grid xs={12} sm={5.7} className={styles.each_comment_wrapper}>
-            <Typography className={styles.first_name}>Firstname</Typography>
-            <Typography className={styles.date}>July 2022</Typography>
-            <Typography className={styles.comment_content}>
-              Amazing coffee Amazing coffeeAmazing coffeeAmazing coffeeAmazing coffeeAmazing coffeeAmazing coffeev Amazing coffee Amazing coff
-            </Typography>
-          </Grid>
-          <Grid xs={12} sm={5.7} className={styles.each_comment_wrapper}>
-            <Typography className={styles.first_name}>Firstname</Typography>
-            <Typography className={styles.date}>July 2022</Typography>
-            <Typography className={styles.comment_content}>
-              Amazing coffee Amazing coffeeAmazing coffeeAmazing coffeeAmazing coffeeAmazing coffeeAmazing coffeev Amazing coffee Amazing coff coffeeAmazing coffeeAmazing coffeev
-              Amazing coffee Amazing coff coffeeAmazing coffeeAmazing coffeev Amazing coffee Amazing coff coffeeAmazing coffeeAmazing coffeev Amazing coffee Amazing coff
-              coffeeAmazing coffeeAmazing coffeev Amazing coffee Amazing coff coffeeAmazing coffeeAmazing coffeev Amazing coffee Amazing coff
-            </Typography>
-          </Grid>
+          {listHasLength(_comments) ? (
+            _comments.map(comment =>
+              strHasLength(comment.comment) ? (
+                <Grid xs={12} sm={5.7} className={styles.each_comment_wrapper}>
+                  <Typography className={styles.first_name}>{comment?.userName ?? ""}</Typography>
+                  <Typography className={styles.date}>{comment.timeStamp}</Typography>
+                  <Typography className={styles.comment_content}>{comment.comment}</Typography>
+                </Grid>
+              ) : (
+                <div></div>
+              ),
+            )
+          ) : (
+            <div></div>
+          )}
         </Grid>
       </Grid>
     </div>

@@ -3,6 +3,8 @@ import { Button, CardActions, Dialog, DialogTitle, Grid, List, ListItem, ListIte
 import { makeStyles } from "@material-ui/core/styles";
 
 import React from "react";
+import { v4 as uuidv4 } from "uuid";
+
 import styles from "./LogInOrSignup.module.scss";
 import CloseIcon from "@mui/icons-material/Close";
 import Slide from "@mui/material/Slide";
@@ -19,37 +21,11 @@ const Transition = React.forwardRef<unknown, TransitionProps>((props, ref) => (
   </Slide>
 ));
 
-const handleSignUpSuccess = async (res: any) => {
-  console.log("Current response", res);
-  localStorage.setItem("user", res?.profileObj?.name);
-  localStorage.setItem("email", res?.profileObj?.email);
-
-  const { email, name } = res?.profileObj;
-  const [firstName, lastName] = name.split(" ");
-
-  const allUserEmails = await getAllAccountEmails();
-
-  if (!allUserEmails.includes(email)) {
-    await createAccount({ email, firstName, lastName });
-  }
-
-  try {
-    await fetch("/api/sign-up", {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify({ email }),
-    });
-  } catch (e) {
-    console.log("Error", e);
-  }
-  refreshTokenSetup(res);
-};
-
 const useDialogStyles = makeStyles(theme => ({
   paper: {
     minWidth: "100vw",
+    overflowX: "hidden",
+
     [theme?.breakpoints.up("sm")]: {
       minWidth: "10vw",
       width: "750px",
@@ -86,14 +62,16 @@ const LogInOrSignup = (props: any) => {
       const firstName = response?.given_name;
       const lastName = response?.family_name;
       const email = response?.email;
+      const userUUID = uuidv4();
 
+      localStorage.setItem("userUUID", userUUID);
       localStorage.setItem("userFirstname", firstName);
-      localStorage.setItem("email", email);
+      localStorage.setItem("userEmail", email);
 
       const allUserEmails = await getAllAccountEmails();
 
       if (!allUserEmails.includes(email)) {
-        await createAccount({ email, firstName, lastName });
+        await createAccount({ uuid: userUUID, email, firstName, lastName });
       }
 
       try {
