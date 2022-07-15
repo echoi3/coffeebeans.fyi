@@ -7,7 +7,6 @@ import "react-multi-carousel/lib/styles.css";
 import styles from "./SinglePost.module.scss";
 
 import { BeanContent } from "src/types/beanContent";
-import { getAllBeanContents } from "src/db/beanContent";
 import { COFFEBEANS_FYI_FILES } from "src/constants";
 
 import monorail from "../../../assets/monorail.png";
@@ -31,10 +30,10 @@ const SinglePost: React.FunctionComponent<IProps> = ({ beanContent }) => {
             <Typography variant="h6" color="inherit" className={styles._title}>
               {beanContent.beanName}
             </Typography>
-            {strHasLength(beanContent.rating) ? (
+            {strHasLength(beanContent.avgRating) ? (
               <>
                 <Stack direction="row" spacing={1} alignItems="center" className={styles._rating}>
-                  <StarIcon style={{ marginTop: "-2px" }} /> {beanContent.rating}
+                  <StarIcon style={{ marginTop: "-2px" }} /> {beanContent.avgRating}
                 </Stack>
               </>
             ) : (

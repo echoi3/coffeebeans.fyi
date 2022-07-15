@@ -1,4 +1,6 @@
 import DynamoDB from "aws-sdk/clients/dynamodb";
+import { v4 as uuidv4 } from "uuid";
+
 import { CONTENTS_TABLE } from "src/constants";
 
 import { BeanContent } from "src/types/beanContent";
@@ -40,5 +42,28 @@ export const getBeanContentByBeanName = async (beanName: string): Promise<BeanCo
     return data.Item as BeanContent;
   } else {
     throw new Error("Content not found");
+  }
+};
+
+export const createBeanContent = async (content: Partial<BeanContent>): Promise<any> => {
+  const dynamoDb = getDynamoDB();
+
+  const Item: DynamoDB.DocumentClient.PutItemInputAttributeMap = {
+    ...content,
+    uuid: uuidv4(),
+    timeStamp: new Date().toLocaleString(),
+    numReviews: "0",
+  };
+
+  const params: DynamoDB.DocumentClient.PutItemInput = {
+    TableName: CONTENTS_TABLE,
+    Item,
+    ConditionExpression: "attribute_not_exists(publicAddress)", // will return an error if key already exists (prevents overwriting an item)
+  };
+
+  try {
+    return await dynamoDb.put(params).promise();
+  } catch (error) {
+    throw error; // bubble up other error types
   }
 };

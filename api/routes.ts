@@ -70,4 +70,34 @@ router.post("/api/sign-up", async (req: any, res: any, next) => {
     });
 });
 
+router.post("/api/post-bean", async (req: any, res: any, next) => {
+  const sgMail = require("@sendgrid/mail");
+  sgMail.setApiKey(process.env.REACT_APP_SENDGRID_API_KEY);
+  const msg = {
+    // to: req.body.email, // Change to your recipient
+    from: {
+      email: "eric.choi@coffeebeans.fyi", // Change to your verified sender
+      name: "Eric from coffeebeans.fyi",
+    },
+    templateId: "d-d5b46af795a4433db542bfa2f30f6b80",
+    personalizations: [
+      {
+        to: "eric.choi@coffeebeans.fyi",
+        dynamic_template_data: {
+          subject: `${req.body.email} posted bean! ${req.body.beanName} by ${req.body.companyName}`,
+        },
+      },
+    ],
+  };
+
+  sgMail
+    .send(msg)
+    .then(() => {
+      console.log("Email sent");
+    })
+    .catch(error => {
+      console.error(error);
+    });
+});
+
 export default router;

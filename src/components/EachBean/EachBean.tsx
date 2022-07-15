@@ -72,8 +72,6 @@ const EachBean = () => {
 
   const location: any = useLocation();
 
-  console.log("location state", location.state);
-
   useEffect(() => {
     const fetchBeanPost = async (): Promise<void> => {
       const beanContent: BeanContent = await getBeanContentById(location.state);
@@ -107,7 +105,7 @@ const EachBean = () => {
         <Grid container order={{ xs: 3, sm: 2, md: 2, lg: 2 }} direction="column" className={styles.ratings_and_review}>
           <Grid xs={12} sm={12}>
             <div style={{ display: "flex" }}>
-              {strHasLength(_beanContent.rating) ? (
+              {strHasLength(_beanContent.avgRating) ? (
                 <>
                   <StarIcon style={{ marginTop: "-1.9px", width: "20px" }} />{" "}
                   <Typography
@@ -117,7 +115,7 @@ const EachBean = () => {
                       marginRight: "7px",
                     }}
                   >
-                    {_beanContent.rating} ·
+                    {_beanContent.avgRating} ·
                   </Typography>
                 </>
               ) : (
@@ -142,7 +140,7 @@ const EachBean = () => {
       <Grid container direction="row" className={styles.comments_wrapper}>
         <Grid xs={12} sm={12}>
           <div className={styles.desktop_commentHeader}>
-            {strHasLength(_beanContent.rating) ? (
+            {strHasLength(_beanContent.avgRating) ? (
               <>
                 <StarIcon style={{ marginTop: "2px", width: "30px" }} />{" "}
                 <Typography
@@ -152,7 +150,7 @@ const EachBean = () => {
                     marginRight: "9px",
                   }}
                 >
-                  {_beanContent.rating} ·
+                  {_beanContent.avgRating} ·
                 </Typography>
               </>
             ) : (

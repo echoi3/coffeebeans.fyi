@@ -2,6 +2,7 @@ export enum BaseRoutes {
   Sign_Up = "/sign-up",
   Log_In = "/log-in",
   BeanContent = "/bean-content",
+  Add_Bean = "/add-bean",
 
   Create_Bean_Content = "/create-bean-content",
   Home = "/",

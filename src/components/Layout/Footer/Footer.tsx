@@ -11,12 +11,8 @@ const Footer: React.FC = () => {
           <Stack direction="row" justifyContent="space-between">
             <div className={styles.footer_left_wrapper}>
               <Stack direction="row" spacing={1}>
-                <Typography
-                  variant="subtitle2"
-                  color="inherit"
-                  className={styles.copyright_title}
-                >
-                  &copy; {new Date().getFullYear()} Coffeebeans.fyi, Inc,
+                <Typography variant="subtitle2" color="inherit" className={styles.copyright_title}>
+                  &copy; {new Date().getFullYear()} coffeebeans.fyi, Inc,
                 </Typography>
                 <ul>
                   <li>. Privacy</li>
