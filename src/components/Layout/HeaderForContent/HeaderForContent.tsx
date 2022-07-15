@@ -42,6 +42,10 @@ const HeaderForContent = (props: { children: any; window: any }) => {
     navigate(BaseRoutes.Home);
   };
 
+  const handleAddBeanClick = (): void => {
+    navigate(BaseRoutes.Add_Bean);
+  };
+
   const handleSignupOrLoginClick = () => {
     setIsSignupOrLoginClicked(true);
   };
@@ -97,8 +101,8 @@ const HeaderForContent = (props: { children: any; window: any }) => {
               </Grid>
               <Grid item xs={12} md={4} sm={4} className={styles.header_post_profile_wrapper}>
                 <Stack direction="row" spacing={2}>
-                  <Button variant="text" color="inherit" className={styles.header_button}>
-                    Create Post
+                  <Button variant="text" color="inherit" className={styles.header_button} onClick={handleAddBeanClick}>
+                    Add Bean
                   </Button>
                   <Button variant="text" color="inherit" className={styles.header_button} onClick={handleSignupOrLoginClick}>
                     Sign Up

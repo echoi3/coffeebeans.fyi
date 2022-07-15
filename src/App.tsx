@@ -5,6 +5,7 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import { BaseRoutes } from "./routes/constants";
 import EachBean from "./components/EachBean/EachBean";
 import Header from "./components/Layout/Header/Header";
+import AddBean from "./components/AddBean/AddBean";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path={BaseRoutes.Sign_Up} element={<LogInOrSignup />} />
             <Route path={`${BaseRoutes.BeanContent}/:beanName`} element={<EachBean />} />
+            <Route path={BaseRoutes.Add_Bean} element={<AddBean />} />
           </Routes>
         </div>
       </GoogleOAuthProvider>

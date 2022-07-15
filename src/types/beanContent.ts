@@ -7,10 +7,12 @@ export interface BeanContent {
   userId: string; // uuid of the user who posts a bean
   timeStamp: string;
   imageName: string;
-  headquarter: string;
+  date?: string;
+  headquarter?: string;
   numReviews: string;
   comments?: Comment[];
   commentedUsers?: string[]; //uuids of users who commented on the bean
-  rating?: string;
+  avgRating?: string;
+  ratings?: string[];
   content?: string;
 }

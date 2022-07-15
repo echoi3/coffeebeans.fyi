@@ -1,0 +1,135 @@
+._wrapper {
+  padding-top: 50px;
+  padding-bottom: 50px;
+  height: 100%;
+
+  @media screen and (max-width: 599px) {
+    padding-top: 0px;
+  }
+
+  .beans_wrapper {
+    margin: 0 auto;
+    max-width: 50vw;
+    width: 50vw;
+    align-items: center;
+
+    @media screen and (max-width: 599px) {
+      margin-left: 20px;
+      margin-right: 20px;
+      max-width: 100vw;
+      width: 100vw;
+      align-items: flex-start;
+    }
+  }
+  ._title {
+    margin-bottom: 10px;
+  }
+  .ratings_and_review {
+    align-items: center;
+    @media screen and (max-width: 599px) {
+      align-items: flex-start;
+    }
+  }
+  ._image {
+    width: 30vw;
+    height: 30vw;
+    border-radius: 15px;
+    margin-top: 10px;
+
+    @media screen and (max-width: 599px) {
+      width: 100vw;
+      height: 100vw;
+      margin-left: -20px;
+      margin-right: -20px;
+      margin-top: 5px;
+    }
+  }
+  .comments_wrapper {
+    margin-left: 16vw;
+    margin-right: 16vw;
+    margin-top: 10px;
+    width: 70vw;
+    overflow-y: auto;
+    height: 100%;
+
+    @media screen and (max-width: 599px) {
+      margin-left: 20px;
+      margin-right: 20px;
+      max-width: 100vw;
+      width: auto;
+    }
+
+    .desktop_commentHeader {
+      display: flex;
+      margin-bottom: 15px;
+
+      @media screen and (max-width: 599px) {
+        display: none;
+      }
+    }
+
+    .rating_wrapper {
+      border: 1px solid;
+      border-radius: 15px;
+      border-color: rgb(0 0 0 / 8%);
+      padding-left: 15px;
+      padding-right: 15px;
+      padding-top: 7px;
+      padding-bottom: 10px;
+      margin-bottom: 15px;
+
+      @media screen and (max-width: 599px) {
+        margin-top: 10px;
+
+        margin-bottom: 5px;
+      }
+
+      .review_title {
+        font-size: 20px;
+        font-weight: 600;
+        padding-left: 5px;
+
+        @media screen and (max-width: 599px) {
+          font-size: 17px;
+          padding-left: 5px;
+        }
+      }
+    }
+
+    .each_comment_wrapper {
+      border: 1px solid;
+      border-radius: 15px;
+      border-color: rgb(0 0 0 / 8%);
+      padding-left: 15px;
+      padding-top: 7px;
+
+      padding-bottom: 10px;
+      margin-top: 0px;
+      margin-right: 15px;
+      margin-bottom: 15px;
+
+      height: 180px;
+      overflow-y: scroll;
+      @media screen and (max-width: 599px) {
+        margin-top: 10px;
+        margin-bottom: 5px;
+        margin-right: 0px;
+      }
+
+      .first_name {
+        font-size: 15px;
+        font-weight: 600;
+        margin-top: 5px;
+      }
+      .date {
+        font-size: 14px;
+        font-weight: 400;
+        color: rgb(0 0 0 / 50%);
+        margin-top: 2px;
+      }
+      .comment_content {
+        margin-top: 10px;
+      }
+    }
+  }
+}

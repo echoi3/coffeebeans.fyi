@@ -1,4 +1,4 @@
-<h1>Coffeebeans.fyi</h1>
+<h1>coffeebeans.fyi</h1>
 <hr><p>E-commerce Website. A website that allows people to buy and sell physical goods, services, and digital products over the internet rather than at a brick-and-mortar location. Through an e-commerce website, a business can process orders, accept payments, manage shipping and logistics, and provide customer service.</p><h2>Technologies Used</h2>
 <hr><ul>
 <li>HTML</li>

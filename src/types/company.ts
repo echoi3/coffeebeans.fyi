@@ -2,11 +2,11 @@ import { BeanContent } from "./beanContent";
 
 export interface Company {
   uuid: string;
+  companyName: string;
   emails?: string[];
-  type: CompanyTypes;
+  accountType: CompanyTypes;
   numTotalReviews?: string;
   overallRating?: string;
-  beanContents: BeanContent[];
 }
 
 export enum CompanyTypes {
