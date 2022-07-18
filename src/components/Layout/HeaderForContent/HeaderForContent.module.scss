@@ -125,6 +125,12 @@
         border-radius: 21px;
         padding: 5px 5px 5px 8px;
       }
+      .share_button {
+        font: inherit;
+        font-weight: 600;
+        font-size: var(--c-zdwk-p);
+        color: #222222;
+      }
     }
   }
 }

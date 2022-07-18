@@ -110,6 +110,7 @@ const Header = (props: { children: any; window: any }) => {
                   <Button variant="text" color="inherit" className={styles.header_button} onClick={handleSignupOrLoginClick}>
                     Log In
                   </Button>
+
                   {/* <div>
                       <React.Fragment>
                         <Button

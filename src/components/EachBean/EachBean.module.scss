@@ -3,6 +3,14 @@
   padding-bottom: 50px;
   height: 100%;
 
+  .share_mobile {
+    display: none;
+    @media screen and (max-width: 599px) {
+      display: flex;
+      justify-content: flex-end;
+    }
+  }
+
   @media screen and (max-width: 599px) {
     padding-top: 0px;
   }
@@ -28,6 +36,15 @@
     align-items: center;
     @media screen and (max-width: 599px) {
       align-items: flex-start;
+      margin: 0 auto;
+    }
+    .share_web {
+      margin-left: 27px;
+      margin-right: 7px;
+      font: inherit;
+      @media screen and (max-width: 599px) {
+        display: none;
+      }
     }
   }
   ._image {
@@ -35,6 +52,7 @@
     height: 30vw;
     border-radius: 15px;
     margin-top: 10px;
+    margin-bottom: 10px;
 
     @media screen and (max-width: 599px) {
       width: 100vw;
@@ -42,6 +60,7 @@
       margin-left: -20px;
       margin-right: -20px;
       margin-top: 5px;
+      margin-bottom: 5px;
     }
   }
   .comments_wrapper {
