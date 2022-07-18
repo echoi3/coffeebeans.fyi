@@ -1,9 +1,11 @@
 import StarIcon from "@mui/icons-material/Star";
+import IosShareIcon from "@mui/icons-material/IosShare";
 import { Box, Rating, Grid, Typography } from "@mui/material";
 import { Button, Container, TextField, makeStyles, Snackbar } from "@material-ui/core";
 
 import React, { useEffect, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import { RWebShare } from "react-web-share";
 
 import styles from "./EachBean.module.scss";
 import { BeanContent } from "src/types/beanContent";
@@ -184,7 +186,25 @@ const EachBean = () => {
 
   return (
     <div className={styles._wrapper}>
-      <HeaderForContent children={undefined} window={undefined} />
+      <HeaderForContent children={undefined} window={undefined} beanContent={_beanContent} href={window.location.href} />
+      <div className={styles.share_mobile}>
+        <RWebShare
+          data={{
+            text: `${_beanContent.beanName} by ${_beanContent.companyName} and its reviews`,
+            url: `${window.location.href}`,
+            title: "Share this bean and its reviews",
+          }}
+          sites={["facebook", "twitter", "reddit", "whatsapp", "telegram", "copy"]}
+          onClick={() => console.log("shared successfully!")}
+        >
+          <button style={{ font: "inherit", fontWeight: "600", fontSize: "15px", background: "none", border: "none", cursor: "pointer" }}>
+            <div style={{ display: "flex", marginTop: "2px", color: "#222222" }}>
+              <IosShareIcon fontSize="small" style={{ marginTop: "2px", marginRight: "3px", color: "#222222" }} />{" "}
+              <span style={{ color: "#222222", textDecoration: "underline", marginRight: "12px", paddingTop: "3px" }}>Share</span>
+            </div>
+          </button>
+        </RWebShare>
+      </div>
       <Grid container direction="column" className={styles.beans_wrapper}>
         <Grid xs={12} sm={12} order={{ xs: 1, sm: 3, md: 3, lg: 3 }}>
           <a href={_beanContent?.productLink} style={{ textDecoration: "none", color: "black" }} target="_blank">
@@ -199,7 +219,7 @@ const EachBean = () => {
             }}
             display="block"
           >
-            <a href={_beanContent?.productLink} style={{ textDecoration: "none", color: "black" }} target="_blank">
+            <a href={_beanContent?.productLink} style={{ textDecoration: "none", color: "#222222" }} target="_blank">
               {" "}
               {_beanContent.beanName} by {_beanContent.companyName}{" "}
             </a>
@@ -236,6 +256,24 @@ const EachBean = () => {
                 {_numReviews} Reviews ·
               </Typography>
               <Typography style={{ fontSize: "15px", fontWeight: "600" }}>{_beanContent.headquarter}</Typography>
+              <div className={styles.share_web}>
+                <RWebShare
+                  data={{
+                    text: `${_beanContent.beanName} by ${_beanContent.companyName} and its reviews`,
+                    url: `${window.location.href}`,
+                    title: "Share this bean and its reviews",
+                  }}
+                  sites={["facebook", "twitter", "reddit", "whatsapp", "telegram", "copy"]}
+                  onClick={() => console.log("shared successfully!")}
+                >
+                  <button style={{ font: "inherit", fontWeight: "600", fontSize: "15px", background: "none", border: "none", cursor: "pointer" }}>
+                    <div style={{ display: "flex", marginTop: "2px", color: "#222222" }}>
+                      <IosShareIcon fontSize="small" style={{ marginTop: "-3px", marginRight: "3px", color: "#222222" }} />{" "}
+                      <span style={{ color: "#222222", textDecoration: "underline" }}>Share</span>
+                    </div>
+                  </button>
+                </RWebShare>
+              </div>
             </div>
           </Grid>
         </Grid>
