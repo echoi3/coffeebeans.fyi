@@ -100,4 +100,28 @@ router.post("/api/post-bean", async (req: any, res: any, next) => {
     });
 });
 
+router.post("/api/post-comment", async (req: any, res: any, next) => {
+  const sgMail = require("@sendgrid/mail");
+  sgMail.setApiKey(process.env.REACT_APP_SENDGRID_API_KEY);
+  const msg = {
+    // to: req.body.email, // Change to your recipient
+    from: {
+      email: "eric.choi@coffeebeans.fyi", // Change to your verified sender
+      name: "Eric from coffeebeans.fyi",
+    },
+    subject: `${req.body.email} posted comment! ${req.body.ratingString} for ${req.body.beanName} by ${req.body.companyName}`,
+    to: "eric.choi@coffeebeans.fyi",
+    text: req.body.comment,
+  };
+
+  sgMail
+    .send(msg)
+    .then(() => {
+      console.log("Email sent");
+    })
+    .catch(error => {
+      console.error(error);
+    });
+});
+
 export default router;

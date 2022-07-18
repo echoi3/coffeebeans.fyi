@@ -7,9 +7,9 @@ import { useLocation, useParams } from "react-router-dom";
 
 import styles from "./EachBean.module.scss";
 import { BeanContent } from "src/types/beanContent";
-import { addRatingAndCommentOnBeanContent, getBeanContentByBeanName, getBeanContentById } from "src/db/beanContent";
+import { addRatingAndCommentOnBeanContent, getBeanContentById } from "src/db/beanContent";
 import { strHasLength } from "src/utils/strings";
-import { COFFEBEANS_FYI_FILES } from "src/constants";
+import { COFFEBEANS_FYI_FILES, UUID_REGEX } from "src/constants";
 import HeaderForContent from "../Layout/HeaderForContent/HeaderForContent";
 import { Comment } from "src/types/comment";
 import { addCommentOnAccount, getUserCommentsById } from "src/db/account";
@@ -89,7 +89,11 @@ const EachBean = () => {
 
   useEffect(() => {
     const fetchBeanPost = async (): Promise<void> => {
-      const beanContent: BeanContent = await getBeanContentById(location.state);
+      const uuidRegex = UUID_REGEX.exec(location.pathname) as string[];
+
+      const contentUUID = uuidRegex[0];
+
+      const beanContent: BeanContent = await getBeanContentById(contentUUID);
 
       setBeanContent(beanContent);
       setComments((beanContent?.comments as Comment[]) ?? []);
@@ -132,6 +136,8 @@ const EachBean = () => {
       setComments(comments);
 
       const ratings = [...((_beanContent?.ratings as String[]) ?? []), ratingString] as string[];
+
+      // calculate new average rating
       const avgRating = (ratings.reduce((acc, val) => acc + Number(val), 0) / ratings.length) as number;
       const avgRatingString = avgRating.toString();
       setAvgRating(avgRatingString);
@@ -142,9 +148,30 @@ const EachBean = () => {
       addRatingAndCommentOnBeanContent(_beanContent.uuid, comments, ratings, avgRatingString, numReviews);
       addCommentOnAccount(userUUID, [...userComments, commentContent]);
 
+      // deep copy a comment
+      const _comment = `${comment}`;
+
       setComment("");
       setRating(0);
       setIsLoading(true);
+
+      try {
+        await fetch("/api/post-comment", {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify({
+            email: userEmail,
+            companyName: _beanContent.companyName,
+            beanName: _beanContent.beanName,
+            comment: strHasLength(_comment) ? _comment : "No Comment",
+            ratingString,
+          }),
+        });
+      } catch (e) {
+        console.log("Error", e);
+      }
     } else {
       setIsError(true);
       setOpen(true);
@@ -160,7 +187,9 @@ const EachBean = () => {
       <HeaderForContent children={undefined} window={undefined} />
       <Grid container direction="column" className={styles.beans_wrapper}>
         <Grid xs={12} sm={12} order={{ xs: 1, sm: 3, md: 3, lg: 3 }}>
-          <img src={`https://s3.amazonaws.com/${COFFEBEANS_FYI_FILES}/${_beanContent.imageName}`} className={styles._image}></img>
+          <a href={_beanContent?.productLink} style={{ textDecoration: "none", color: "black" }} target="_blank">
+            <img src={`https://s3.amazonaws.com/${COFFEBEANS_FYI_FILES}/${_beanContent.imageName}`} className={styles._image}></img>
+          </a>
         </Grid>
         <Grid xs={12} sm={12} className={styles._title} order={{ xs: 2, sm: 1, md: 1, lg: 1 }}>
           <Typography
@@ -170,7 +199,10 @@ const EachBean = () => {
             }}
             display="block"
           >
-            {_beanContent.beanName} by {_beanContent.companyName}
+            <a href={_beanContent?.productLink} style={{ textDecoration: "none", color: "black" }} target="_blank">
+              {" "}
+              {_beanContent.beanName} by {_beanContent.companyName}{" "}
+            </a>
           </Typography>
         </Grid>
         <Grid container order={{ xs: 3, sm: 2, md: 2, lg: 2 }} direction="column" className={styles.ratings_and_review}>
