@@ -30,22 +30,6 @@ export const getBeanContentById = async (id: string): Promise<BeanContent> => {
   }
 };
 
-export const getBeanContentByBeanName = async (beanName: string): Promise<BeanContent> => {
-  if (strHasLength(beanName)) {
-    const dynamoDb = getDynamoDB();
-    const params: DynamoDB.DocumentClient.GetItemInput = {
-      TableName: CONTENTS_TABLE,
-      Key: {
-        beanName,
-      },
-    };
-    const data: DynamoDB.DocumentClient.GetItemOutput = await dynamoDb.get(params).promise();
-    return data.Item as BeanContent;
-  } else {
-    throw new Error("Content not found");
-  }
-};
-
 export const createBeanContent = async (content: Partial<BeanContent>): Promise<any> => {
   const dynamoDb = getDynamoDB();
 

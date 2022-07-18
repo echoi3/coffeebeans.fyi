@@ -36,9 +36,8 @@ const Post: React.FunctionComponent = () => {
             {_beanContents?.map(beanContent => (
               <Link
                 to={{
-                  pathname: `${BaseRoutes.BeanContent}/` + beanContent.beanName.replace(/\s+/g, " ").trim().split(" ").join("-"),
+                  pathname: `${BaseRoutes.BeanContent}/` + beanContent.uuid,
                 }}
-                state={beanContent.uuid}
                 style={{ textDecoration: "none" }}
               >
                 <Box key={beanContent.uuid}>

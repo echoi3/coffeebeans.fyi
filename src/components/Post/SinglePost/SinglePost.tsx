@@ -33,7 +33,7 @@ const SinglePost: React.FunctionComponent<IProps> = ({ beanContent }) => {
             {strHasLength(beanContent.avgRating) ? (
               <>
                 <Stack direction="row" spacing={1} alignItems="center" className={styles._rating}>
-                  <StarIcon style={{ marginTop: "-2px" }} /> {beanContent.avgRating}
+                  <StarIcon style={{ marginTop: "-2px" }} /> {Number(beanContent.avgRating).toFixed(2)}
                 </Stack>
               </>
             ) : (

@@ -9,7 +9,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 import styles from "./AddBean.module.scss";
 import { BeanContent } from "src/types/beanContent";
-import { createBeanContent, getAllBeanContents, getBeanContentByBeanName, getBeanContentById } from "src/db/beanContent";
+import { createBeanContent, getAllBeanContents, getBeanContentById } from "src/db/beanContent";
 import { strHasLength } from "src/utils/strings";
 import { COFFEBEANS_FYI_FILES } from "src/constants";
 import HeaderForContent from "../Layout/HeaderForContent/HeaderForContent";
@@ -93,6 +93,7 @@ const AddBean = () => {
   const [companyName, setCompanyName] = useState("");
   const [beanName, setBeanName] = useState("");
   const [headquarter, setHeadquarter] = useState("");
+  const [productLink, setProductLink] = useState("");
 
   const [_beanContents, setBeanContents] = useState([] as BeanContent[]);
   const [_uniqueCoffeeCompanies, setUniqueCoffeeCompanies] = useState([] as string[]);
@@ -118,9 +119,6 @@ const AddBean = () => {
     };
     isLoading && fetchBeanContents();
   }, [isLoading]);
-
-  console.log("Company name", companyName);
-  console.log("Bean name", beanName);
 
   const retrieveBeansFromCompany = () => {
     const beansList = _beanContents.map(beanContent => {
@@ -158,6 +156,7 @@ const AddBean = () => {
         companyName,
         beanName,
         headquarter,
+        productLink,
         imageName: (file as any).name as string,
       };
 
@@ -250,6 +249,17 @@ const AddBean = () => {
                   options={_uniqueBeans}
                   getOptionLabel={option => option}
                   renderInput={params => <TextField required {...params} label="Name of the coffee bean?" fullWidth margin="normal" variant="outlined" />}
+                />
+
+                <TextField
+                  variant="outlined"
+                  margin="normal"
+                  fullWidth
+                  required
+                  label="URL of the product?"
+                  helperText="example: https://monorailespresso.com/products/costa-rica-single-origin"
+                  value={productLink}
+                  onInput={e => setProductLink((e?.target as HTMLInputElement).value)}
                 />
 
                 <TextField
