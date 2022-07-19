@@ -134,6 +134,12 @@
 //   font-style: normal;
 // }
 
+html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: auto;
+}
 body {
   position: relative;
   font-family: "Roboto";
@@ -144,6 +150,9 @@ body {
   margin: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  height: 100%;
+
+  padding: 0;
 }
 
 .css-1aquho2-MuiTabs-indicator {

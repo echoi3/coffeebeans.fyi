@@ -41,7 +41,7 @@ export const getUserCommentsById = async (id: string): Promise<Comment[]> => {
       },
     };
     const data: DynamoDB.DocumentClient.GetItemOutput = await dynamoDb.get(params).promise();
-    return (data.Item as any).comments ?? ([] as Comment[]);
+    return (data.Item as any)?.comments ?? ([] as Comment[]);
   } else {
     throw new Error("Content not found");
   }

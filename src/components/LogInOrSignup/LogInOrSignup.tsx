@@ -13,7 +13,7 @@ import GoogleLogo from "../../assets/google.svg";
 import { createAccount, getAllAccountEmails } from "../../db/account";
 import { refreshTokenSetup } from "../../utils/auth";
 
-import { GoogleLogin, useGoogleLogin } from "@react-oauth/google";
+import { GoogleLogin, useGoogleLogin, googleLogout } from "@react-oauth/google";
 
 const Transition = React.forwardRef<unknown, TransitionProps>((props, ref) => (
   <Slide direction="up" ref={ref} {...props}>
@@ -53,11 +53,7 @@ const LogInOrSignup = (props: any) => {
 
   const login = useGoogleLogin({
     onSuccess: async res => {
-      console.log(res);
-      console.log("Current response", res);
-
       const response = await fetchUserInfo(res?.access_token);
-      console.log("User response", response);
 
       const firstName = response?.given_name;
       const lastName = response?.family_name;
@@ -70,21 +66,25 @@ const LogInOrSignup = (props: any) => {
 
       const allUserEmails = await getAllAccountEmails();
 
+      // if account not on DynamoDB, create an account on DynamoDB
       if (!allUserEmails.includes(email)) {
         await createAccount({ uuid: userUUID, email, firstName, lastName });
-      }
+        onClose();
 
-      try {
-        await fetch("/api/sign-up", {
-          method: "POST",
-          headers: {
-            "Content-type": "application/json",
-          },
-          body: JSON.stringify({ email }),
-        });
-      } catch (e) {
-        console.log("Error", e);
+        try {
+          await fetch("/api/sign-up", {
+            method: "POST",
+            headers: {
+              "Content-type": "application/json",
+            },
+            body: JSON.stringify({ email }),
+          });
+        } catch (e) {
+          console.log("Error", e);
+        }
       }
+      onClose();
+
       // refreshTokenSetup(res);
     },
   });
@@ -97,10 +97,10 @@ const LogInOrSignup = (props: any) => {
     <Dialog onClose={handleClose} open={open} classes={dialogClasses}>
       <DialogTitle style={{ display: "flex" }}>
         <Grid container>
-          <Grid xs={1} onClick={handleClose}>
+          <Grid item xs={1} onClick={handleClose}>
             <CloseIcon className={styles.close_button} />
           </Grid>
-          <Grid xs={10}>
+          <Grid item xs={10}>
             <Typography
               className={styles.login_or_signup}
               style={{
@@ -127,7 +127,7 @@ const LogInOrSignup = (props: any) => {
         <ListItem>
           <ListItemAvatar>
             <Grid container direction="column" justifyContent="center" alignItems="center" textAlign="center">
-              <Grid xs={12}>
+              <Grid item xs={12}>
                 <Button
                   onClick={() => login()}
                   variant="text"
@@ -140,10 +140,10 @@ const LogInOrSignup = (props: any) => {
                 >
                   <Grid container>
                     {" "}
-                    <Grid xs={1}>
+                    <Grid item xs={1}>
                       <img src={GoogleLogo} alt="google sign up" className={styles.google_logo} />
                     </Grid>
-                    <Grid xs={11} className={styles.google_logo_text}>
+                    <Grid item xs={11} className={styles.google_logo_text}>
                       {" "}
                       Continue with Google
                     </Grid>
