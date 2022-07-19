@@ -17,26 +17,17 @@ import { BaseRoutes } from "src/routes/constants";
 import { listHasLength } from "src/utils/list";
 
 const handleScrollPosition = () => {
-  console.log("========handleScrollPosition start ========");
   const _scrollPosition = localStorage.getItem("scrollPosition");
   if (_scrollPosition) {
-    // console.log("before", window.pageYOffset);
     setTimeout(function () {
       window.scrollTo(0, parseInt(_scrollPosition));
     }, 100);
-    console.log(document.body.offsetHeight);
-    console.log("window innerheight", window.innerHeight);
-    console.log("window outerheight", window.outerHeight);
-
-    console.log("AFTER", "parseInt(scrollPosition)", parseInt(_scrollPosition), "window.pageYOffset", window.scrollY);
 
     if (window.scrollY < parseInt(_scrollPosition)) {
       window.scrollTo({ top: parseInt(_scrollPosition) });
-      console.log("scroll again");
     }
     localStorage.removeItem("scrollPosition");
   }
-  console.log("========handleScrollPosition end ========");
 };
 
 const Post: React.FunctionComponent = () => {
@@ -47,10 +38,9 @@ const Post: React.FunctionComponent = () => {
   const myRef = useRef();
 
   useEffect(() => {
-    console.log("--------- useEffect ------------");
     const fetchBeanContents = async (): Promise<void> => {
       const beanContents: BeanContent[] = await getAllBeanContents();
-      setBeanContents([...beanContents, ...beanContents, ...beanContents, ...beanContents, ...beanContents]);
+      setBeanContents(beanContents);
       setIsLoading(false);
     };
 
@@ -65,10 +55,7 @@ const Post: React.FunctionComponent = () => {
 
   const handleLinkClick = e => {
     // e.preventDefault();
-    console.log("handleContentClick start");
     const scrollPosition = `${window.scrollY}` as any;
-
-    console.log("scrollPosition:   ", scrollPosition);
 
     localStorage.setItem("scrollPosition", scrollPosition);
   };
