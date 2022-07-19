@@ -8,14 +8,9 @@ interface IProps {
 }
 
 const SingleBox: React.FunctionComponent<IProps> = ({ data }) => {
-  console.log(data);
   return (
     <Stack direction="column" className={styles._wrapper}>
-      <img
-        src={data?.image}
-        alt="filter"
-        style={{ width: "25px", height: "25px" }}
-      />
+      <img src={data?.image} alt="filter" style={{ width: "25px", height: "25px" }} />
       {/* <Image
         src={data?.image}
         alt="filter"
