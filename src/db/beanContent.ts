@@ -56,6 +56,7 @@ export const createBeanContent = async (content: Partial<BeanContent>): Promise<
 export const addRatingAndCommentOnBeanContent = async (
   beanContentUUID: string,
   newComments: Comment[],
+  newCommentedUsers: string[],
   newRatings: string[],
   newAvgRating: string,
   newNumReviews: string,
@@ -67,9 +68,10 @@ export const addRatingAndCommentOnBeanContent = async (
     Key: {
       uuid: beanContentUUID,
     },
-    UpdateExpression: "SET comments = :newComments, ratings = :newRatings, avgRating = :newAvgRating, numReviews = :newNumReviews",
+    UpdateExpression: "SET comments = :newComments, commentedUsers = :newCommentedUsers, ratings = :newRatings, avgRating = :newAvgRating, numReviews = :newNumReviews",
     ExpressionAttributeValues: {
       ":newComments": newComments,
+      ":newCommentedUsers": newCommentedUsers,
       ":newRatings": newRatings,
       ":newAvgRating": newAvgRating,
       ":newNumReviews": newNumReviews,

@@ -11,12 +11,14 @@ import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
+import { googleLogout } from "@react-oauth/google";
 import SearchBox from "../../common/SearchBox";
 import LogInOrSignup from "../../LogInOrSignup/LogInOrSignup";
 import logo from "../../../assets/logo.png";
 
 import styles from "./Header.module.scss";
 import { BaseRoutes } from "src/routes/constants";
+import { isLoggedin } from "src/utils/login";
 
 // function ElevationScroll(props: { children: any; window: any }) {
 //   const { children, window } = props;
@@ -37,6 +39,10 @@ const Header = (props: { children: any; window: any }) => {
 
   const [isSignupOrLoginClicked, setIsSignupOrLoginClicked] = useState(false);
 
+  const userEmail = localStorage?.getItem("userEmail") ?? "";
+  const userFirstName = localStorage?.getItem("userFirstname") ?? "";
+  const userUUID = localStorage?.getItem("userUUID") ?? "";
+
   const handleLogoClick = (): void => {
     navigate(BaseRoutes.Home);
   };
@@ -47,6 +53,15 @@ const Header = (props: { children: any; window: any }) => {
 
   const handleSignupOrLoginClick = () => {
     setIsSignupOrLoginClicked(true);
+  };
+
+  const handleLogOutClick = () => {
+    googleLogout();
+
+    localStorage.removeItem("userEmail");
+    localStorage.removeItem("userFirstname");
+    localStorage.removeItem("userUUID");
+    navigate(0);
   };
   const handleSignupOrLoginClose = () => {
     setIsSignupOrLoginClicked(false);
@@ -84,12 +99,20 @@ const Header = (props: { children: any; window: any }) => {
 
                     <div>
                       <Stack direction="row" spacing={1}>
-                        <Button variant="text" color="inherit" onClick={handleSignupOrLoginClick}>
-                          Sign up
-                        </Button>
-                        <Button variant="text" color="inherit" onClick={handleSignupOrLoginClick}>
-                          Log In{" "}
-                        </Button>
+                        {isLoggedin(userEmail, userUUID) ? (
+                          <Button variant="text" color="inherit" className={styles.header_button} onClick={handleLogOutClick}>
+                            Log Out
+                          </Button>
+                        ) : (
+                          <>
+                            <Button variant="text" color="inherit" onClick={handleSignupOrLoginClick}>
+                              Sign up
+                            </Button>
+                            <Button variant="text" color="inherit" onClick={handleSignupOrLoginClick}>
+                              Log In{" "}
+                            </Button>
+                          </>
+                        )}
                       </Stack>
                     </div>
                   </Stack>
@@ -103,13 +126,22 @@ const Header = (props: { children: any; window: any }) => {
                   <Button variant="text" color="inherit" className={styles.header_button} onClick={handleAddBeanClick}>
                     Add Bean
                   </Button>
-                  <Button variant="text" color="inherit" className={styles.header_button} onClick={handleSignupOrLoginClick}>
-                    Sign Up
-                  </Button>
+                  {isLoggedin(userEmail, userUUID) ? (
+                    <Button variant="text" color="inherit" className={styles.header_button} onClick={handleLogOutClick}>
+                      Log Out
+                    </Button>
+                  ) : (
+                    <>
+                      <Button variant="text" color="inherit" className={styles.header_button} onClick={handleSignupOrLoginClick}>
+                        Sign Up
+                      </Button>
+                      <Button variant="text" color="inherit" className={styles.header_button} onClick={handleSignupOrLoginClick}>
+                        Log In
+                      </Button>
+                    </>
+                  )}
+
                   <LogInOrSignup onClose={handleSignupOrLoginClose} open={isSignupOrLoginClicked} />
-                  <Button variant="text" color="inherit" className={styles.header_button} onClick={handleSignupOrLoginClick}>
-                    Log In
-                  </Button>
 
                   {/* <div>
                       <React.Fragment>

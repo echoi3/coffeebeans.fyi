@@ -16,6 +16,8 @@ import HeaderForContent from "../Layout/HeaderForContent/HeaderForContent";
 import { Comment } from "src/types/comment";
 import { addCommentOnAccount, getUserCommentsById } from "src/db/account";
 import { listHasLength } from "src/utils/list";
+import LogInOrSignup from "../LogInOrSignup/LogInOrSignup";
+import { isLoggedin } from "src/utils/login";
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -68,6 +70,14 @@ function getLabelText(value: number) {
   return `${value} Star${value !== 1 ? "s" : ""}, ${labels[value]}`;
 }
 
+function useScrollToTop() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+}
+
 const EachBean = () => {
   const [rating, setRating] = React.useState<number | null>(0);
   const [hover, setHover] = React.useState(-1);
@@ -77,17 +87,22 @@ const EachBean = () => {
 
   const [comment, setComment] = useState("");
   const [_comments, setComments] = useState([] as Comment[]);
+  const [_commentedUsers, setCommentedUsers] = useState([] as string[]);
   const [_avgRating, setAvgRating] = useState("");
   const [_numReviews, setNumReviews] = useState("");
 
   const [open, setOpen] = useState(false);
   const [isError, setIsError] = useState(false);
 
+  const [isSignupOrLoginClicked, setIsSignupOrLoginClicked] = useState(false);
+
   const userEmail = localStorage?.getItem("userEmail") ?? "";
   const userFirstName = localStorage?.getItem("userFirstname") ?? "";
   const userUUID = localStorage?.getItem("userUUID") ?? "";
 
   const location: any = useLocation();
+
+  // useScrollToTop();
 
   useEffect(() => {
     const fetchBeanPost = async (): Promise<void> => {
@@ -104,6 +119,7 @@ const EachBean = () => {
       setIsLoading(false);
     };
     isLoading && fetchBeanPost();
+    !isLoading && window.scrollTo(0, 0);
   }, [isLoading]);
 
   const classes = useStyles();
@@ -112,67 +128,74 @@ const EachBean = () => {
     e.preventDefault();
 
     if ((rating as number) > 0) {
-      const ratingString = rating?.toString();
-      setIsError(false);
-      setOpen(true);
+      if (isLoggedin(userEmail, userUUID)) {
+        const ratingString = rating?.toString();
+        setIsError(false);
+        setOpen(true);
 
-      const date = new Date();
-      const year = date.getUTCFullYear().toString();
-      const monthName = date
-        .toLocaleString("default", {
-          month: "long",
-        })
-        .toString();
+        const date = new Date();
+        const year = date.getUTCFullYear().toString();
+        const monthName = date
+          .toLocaleString("default", {
+            month: "long",
+          })
+          .toString();
 
-      const commentContent: Comment = {
-        id: _beanContent.uuid,
-        userName: userFirstName,
-        timeStamp: monthName + " " + year,
-        rating: ratingString as string,
-        comment,
-      };
+        const commentContent: Comment = {
+          id: _beanContent.uuid,
+          userName: userFirstName,
+          timeStamp: monthName + " " + year,
+          rating: ratingString as string,
+          comment,
+        };
 
-      const userComments = await getUserCommentsById(userUUID);
+        const userComments = await getUserCommentsById(userUUID);
 
-      const comments = [...((_beanContent?.comments as Comment[]) ?? []), commentContent];
-      setComments(comments);
+        const comments = [...((_beanContent?.comments as Comment[]) ?? []), commentContent];
+        setComments(comments);
 
-      const ratings = [...((_beanContent?.ratings as String[]) ?? []), ratingString] as string[];
+        const commentedUsers = [...((_beanContent?.commentedUsers as string[]) ?? []), userEmail];
+        setCommentedUsers(commentedUsers);
 
-      // calculate new average rating
-      const avgRating = (ratings.reduce((acc, val) => acc + Number(val), 0) / ratings.length) as number;
-      const avgRatingString = avgRating.toString();
-      setAvgRating(avgRatingString);
+        const ratings = [...((_beanContent?.ratings as String[]) ?? []), ratingString] as string[];
 
-      const numReviews = strHasLength(commentContent.comment) ? String(Number(_beanContent.numReviews) + 1) : _beanContent.numReviews;
-      setNumReviews(numReviews);
+        // calculate new average rating
+        const avgRating = (ratings.reduce((acc, val) => acc + Number(val), 0) / ratings.length) as number;
+        const avgRatingString = avgRating.toString();
+        setAvgRating(avgRatingString);
 
-      addRatingAndCommentOnBeanContent(_beanContent.uuid, comments, ratings, avgRatingString, numReviews);
-      addCommentOnAccount(userUUID, [...userComments, commentContent]);
+        const numReviews = strHasLength(commentContent.comment) ? String(Number(_beanContent.numReviews) + 1) : _beanContent.numReviews;
+        setNumReviews(numReviews);
 
-      // deep copy a comment
-      const _comment = `${comment}`;
+        addRatingAndCommentOnBeanContent(_beanContent.uuid, comments, commentedUsers, ratings, avgRatingString, numReviews);
+        addCommentOnAccount(userUUID, [...userComments, commentContent]);
 
-      setComment("");
-      setRating(0);
-      setIsLoading(true);
+        // deep copy a comment
+        const _comment = `${comment}`;
 
-      try {
-        await fetch("/api/post-comment", {
-          method: "POST",
-          headers: {
-            "Content-type": "application/json",
-          },
-          body: JSON.stringify({
-            email: userEmail,
-            companyName: _beanContent.companyName,
-            beanName: _beanContent.beanName,
-            comment: strHasLength(_comment) ? _comment : "No Comment",
-            ratingString,
-          }),
-        });
-      } catch (e) {
-        console.log("Error", e);
+        setComment("");
+        setRating(0);
+        setIsLoading(true);
+
+        try {
+          await fetch("/api/post-comment", {
+            method: "POST",
+            headers: {
+              "Content-type": "application/json",
+            },
+            body: JSON.stringify({
+              email: userEmail,
+              companyName: _beanContent.companyName,
+              beanName: _beanContent.beanName,
+              comment: strHasLength(_comment) ? _comment : "No Comment",
+              ratingString,
+            }),
+          });
+        } catch (e) {
+          console.log("Error", e);
+        }
+      } else {
+        setIsSignupOrLoginClicked(true);
       }
     } else {
       setIsError(true);
@@ -182,6 +205,10 @@ const EachBean = () => {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleSignupOrLoginClose = () => {
+    setIsSignupOrLoginClicked(false);
   };
 
   return (
@@ -397,6 +424,7 @@ const EachBean = () => {
           )}
         </Grid>
       </Grid>
+      <LogInOrSignup onClose={handleSignupOrLoginClose} open={isSignupOrLoginClicked} />
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import Home from "./components/Home/Home";
 import LogInOrSignup from "./components/LogInOrSignup/LogInOrSignup";
 import { GoogleOAuthProvider } from "@react-oauth/google";
@@ -6,6 +6,7 @@ import { BaseRoutes } from "./routes/constants";
 import EachBean from "./components/EachBean/EachBean";
 import Header from "./components/Layout/Header/Header";
 import AddBean from "./components/AddBean/AddBean";
+import { useEffect } from "react";
 
 function App() {
   return (
@@ -17,8 +18,6 @@ function App() {
             maxWidth: "100vw",
             overflowX: "hidden",
             width: "100vw",
-            minHeight: "100vh",
-            maxHeight: "100%",
           }}
         >
           <Routes>
