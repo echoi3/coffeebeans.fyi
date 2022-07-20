@@ -126,7 +126,6 @@ const AddBean = () => {
         return beanContent.beanName;
       }
     }) as string[];
-    console.log("Beans?? ", beansList);
     setUniqueBeans(beansList.filter(Boolean));
   };
 

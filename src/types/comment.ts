@@ -1,7 +1,9 @@
 export interface Comment {
   id: string; // uuid from BeanContent
   userName: string;
+  userEmail: string;
   timeStamp: string; // Month Year
+  rawTimeStamp: string;
   rating: string;
   comment: string;
   ratingDetails?: {

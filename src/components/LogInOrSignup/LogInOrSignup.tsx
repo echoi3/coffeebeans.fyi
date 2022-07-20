@@ -10,7 +10,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import Slide from "@mui/material/Slide";
 // import { GoogleLogin } from "react-google-login";
 import GoogleLogo from "../../assets/google.svg";
-import { createAccount, getAllAccountEmails } from "../../db/account";
+import { createAccount, getAllAccountEmails, getUUIDFromEmail } from "../../db/account";
 import { refreshTokenSetup } from "../../utils/auth";
 
 import { GoogleLogin, useGoogleLogin, googleLogout } from "@react-oauth/google";
@@ -58,7 +58,8 @@ const LogInOrSignup = (props: any) => {
       const firstName = response?.given_name;
       const lastName = response?.family_name;
       const email = response?.email;
-      const userUUID = uuidv4();
+      const userUUID = (await getUUIDFromEmail(email)) ?? "";
+      console.log("User UUID by signing in", userUUID);
 
       localStorage.setItem("userUUID", userUUID);
       localStorage.setItem("userFirstname", firstName);
@@ -68,6 +69,9 @@ const LogInOrSignup = (props: any) => {
 
       // if account not on DynamoDB, create an account on DynamoDB
       if (!allUserEmails.includes(email)) {
+        const userUUID = uuidv4();
+        localStorage.setItem("userUUID", userUUID);
+
         await createAccount({ uuid: userUUID, email, firstName, lastName });
         onClose();
 
