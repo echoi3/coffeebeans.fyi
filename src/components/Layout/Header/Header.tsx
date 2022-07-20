@@ -44,7 +44,10 @@ const Header = (props: { children: any; window: any }) => {
   const userUUID = localStorage?.getItem("userUUID") ?? "";
 
   const handleLogoClick = (): void => {
-    navigate(BaseRoutes.Home);
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
   };
 
   const handleAddBeanClick = (): void => {

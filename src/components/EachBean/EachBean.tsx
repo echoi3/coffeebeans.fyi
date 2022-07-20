@@ -144,7 +144,9 @@ const EachBean = () => {
         const commentContent: Comment = {
           id: _beanContent.uuid,
           userName: userFirstName,
+          userEmail,
           timeStamp: monthName + " " + year,
+          rawTimeStamp: date.toLocaleString() as string,
           rating: ratingString as string,
           comment,
         };
@@ -342,7 +344,7 @@ const EachBean = () => {
             <Grid xs={12} sm={11.6} className={styles.rating_wrapper}>
               <Grid container>
                 <Grid xs={12} sm={12}>
-                  <Typography className={styles.review_title}>Add Your review</Typography>
+                  <Typography className={styles.review_title}>Add Your Review</Typography>
                 </Grid>
                 <Grid xs={12} sm={12}>
                   <Box
@@ -379,10 +381,9 @@ const EachBean = () => {
                     variant="outlined"
                     margin="normal"
                     fullWidth
-                    label="What did you think of the coffee bean? (optional)"
+                    label={`What did you think of the coffee bean? (optional)`}
                     multiline
                     value={comment}
-                    rows={4}
                     onInput={e => setComment((e?.target as HTMLInputElement).value)}
                   />
                   <Button type="submit" fullWidth variant="contained" className={classes.submit}>
@@ -404,13 +405,24 @@ const EachBean = () => {
             </Grid>
           </Grid>
         ) : (
-          <div></div>
+          <Grid container direction="row">
+            <Grid xs={12} sm={11.6} className={styles.rating_wrapper}>
+              <Grid container>
+                <Grid xs={12} sm={12}>
+                  <Typography className={styles.review_title}>Thanks for your review :)</Typography>
+                </Grid>
+                <Grid xs={12} sm={12}>
+                  <Typography className={styles.message_after_review}>You can leave one review for each bean.</Typography>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
         )}
         <Grid container>
           {listHasLength(_comments) ? (
             _comments.map(comment =>
               strHasLength(comment.comment) ? (
-                <Grid xs={12} sm={5.7} className={styles.each_comment_wrapper}>
+                <Grid xs={12} sm={5.7} className={comment.userEmail === userEmail ? styles.my_comment_wrapper : styles.each_comment_wrapper}>
                   <Typography className={styles.first_name}>{comment?.userName ?? ""}</Typography>
                   <Typography className={styles.date}>{comment.timeStamp}</Typography>
                   <Typography className={styles.comment_content}>{comment.comment}</Typography>

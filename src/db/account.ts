@@ -31,6 +31,13 @@ export const getAllAccountEmails = async (): Promise<string[]> => {
   return data?.Items?.map(item => item.email) as string[];
 };
 
+export const getUUIDFromEmail = async (userEmail: string): Promise<string> => {
+  const dynamoDb = getDynamoDB();
+  const data: DynamoDB.DocumentClient.ScanOutput = await dynamoDb.scan({ TableName: ACCOUNTS_TABLE }).promise();
+  const xx = data?.Items?.find(item => item.email === userEmail) as Account;
+  return (data?.Items?.find(item => item.email === userEmail) as Account)?.uuid ?? "";
+};
+
 export const getUserCommentsById = async (id: string): Promise<Comment[]> => {
   if (strHasLength(id)) {
     const dynamoDb = getDynamoDB();
@@ -46,6 +53,7 @@ export const getUserCommentsById = async (id: string): Promise<Comment[]> => {
     throw new Error("Content not found");
   }
 };
+
 export const addCommentOnAccount = async (userUUID: string, newComments: Comment[]): Promise<any> => {
   const dynamoDb = getDynamoDB();
 
