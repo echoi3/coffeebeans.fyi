@@ -7,7 +7,7 @@ export interface BeanContent {
   userId: string; // uuid of the user who posts a bean
   timeStamp: string;
   imageName: string;
-  productLink: string;
+  productLink?: string;
   date?: string;
   headquarter?: string;
   numReviews: string;

@@ -7,6 +7,8 @@ import EachBean from "./components/EachBean/EachBean";
 import Header from "./components/Layout/Header/Header";
 import AddBean from "./components/AddBean/AddBean";
 import { useEffect } from "react";
+import Terms from "./components/Terms/Terms";
+import Privacy from "./components/Privacy/Privacy";
 
 function App() {
   return (
@@ -25,6 +27,8 @@ function App() {
             <Route path={BaseRoutes.Sign_Up} element={<LogInOrSignup />} />
             <Route path={`${BaseRoutes.BeanContent}/:beanName`} element={<EachBean />} />
             <Route path={BaseRoutes.Add_Bean} element={<AddBean />} />
+            <Route path={BaseRoutes.Terms} element={<Terms />} />
+            <Route path={BaseRoutes.Privacy} element={<Privacy />} />
           </Routes>
         </div>
       </GoogleOAuthProvider>

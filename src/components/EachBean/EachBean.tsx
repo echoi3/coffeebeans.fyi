@@ -18,6 +18,7 @@ import { addCommentOnAccount, getUserCommentsById } from "src/db/account";
 import { listHasLength } from "src/utils/list";
 import LogInOrSignup from "../LogInOrSignup/LogInOrSignup";
 import { isLoggedin } from "src/utils/login";
+import FooterForContent from "../Layout/FooterForContent/FooterForContent";
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -51,6 +52,12 @@ const useStyles = makeStyles(theme => ({
     justifyContent: "center",
     fontSize: "1.2rem",
   },
+  labelRoot: {
+    marginTop: "-10px",
+    lineHeight: "20px",
+    "&$labelFocused": {},
+  },
+  labelFocused: {},
 }));
 
 const labels: { [index: string]: string } = {
@@ -236,9 +243,7 @@ const EachBean = () => {
       </div>
       <Grid container direction="column" className={styles.beans_wrapper}>
         <Grid xs={12} sm={12} order={{ xs: 1, sm: 3, md: 3, lg: 3 }}>
-          <a href={_beanContent?.productLink} style={{ textDecoration: "none", color: "black" }} target="_blank">
-            <img src={`https://s3.amazonaws.com/${COFFEBEANS_FYI_FILES}/${_beanContent.imageName}`} className={styles._image}></img>
-          </a>
+          <img src={`https://s3.amazonaws.com/${COFFEBEANS_FYI_FILES}/${_beanContent.imageName}`} className={styles._image}></img>
         </Grid>
         <Grid xs={12} sm={12} className={styles._title} order={{ xs: 2, sm: 1, md: 1, lg: 1 }}>
           <Typography
@@ -248,7 +253,7 @@ const EachBean = () => {
             }}
             display="block"
           >
-            <a href={_beanContent?.productLink} style={{ textDecoration: "none", color: "#222222" }} target="_blank">
+            <a href={_beanContent?.productLink ?? ""} style={{ textDecoration: "none", color: "#222222" }} target="_blank">
               {" "}
               {_beanContent.beanName} by {_beanContent.companyName}{" "}
             </a>
@@ -282,9 +287,9 @@ const EachBean = () => {
                   marginLeft: "3px",
                 }}
               >
-                {_numReviews} Reviews ·
+                {_numReviews} Reviews
               </Typography>
-              <Typography style={{ fontSize: "15px", fontWeight: "600" }}>{_beanContent.headquarter}</Typography>
+              <Typography style={{ fontSize: "15px", fontWeight: "600" }}> {strHasLength(_beanContent.headquarter) ? `·  ${_beanContent.headquarter}` : ""}</Typography>
               <div className={styles.share_web}>
                 <RWebShare
                   data={{
@@ -382,6 +387,12 @@ const EachBean = () => {
                     margin="normal"
                     fullWidth
                     label={`What did you think of the coffee bean? (optional)`}
+                    InputLabelProps={{
+                      classes: {
+                        root: classes.labelRoot,
+                        focused: classes.labelFocused,
+                      },
+                    }}
                     multiline
                     value={comment}
                     onInput={e => setComment((e?.target as HTMLInputElement).value)}
@@ -437,6 +448,7 @@ const EachBean = () => {
         </Grid>
       </Grid>
       <LogInOrSignup onClose={handleSignupOrLoginClose} open={isSignupOrLoginClicked} />
+      <FooterForContent />
     </div>
   );
 };
