@@ -71,17 +71,25 @@
         display: none;
         width: 100%;
 
+        .mobile_lets_chat {
+          margin-right: -10px;
+          cursor: pointer;
+        }
         .mobile_add_bean {
           margin-right: -10px;
+          cursor: pointer;
         }
         .mobile_sign_up {
           margin-right: -15px;
+          cursor: pointer;
         }
         .mobile_log_in {
           margin-right: -5px;
+          cursor: pointer;
         }
         .mobile_log_out {
           margin-right: 0px;
+          cursor: pointer;
         }
 
         svg {
@@ -112,19 +120,48 @@
     .header_post_profile_wrapper {
       display: flex;
       justify-content: flex-end;
-      align-items: center;
       @media screen and (max-width: 600px) {
         display: none;
       }
-      .header_button {
+      .lets_chat {
+        width: 108px;
         font-size: var(--c-zdwk-p);
         line-height: var(--j-p-z-kco);
         font-weight: var(--jx-zk-pv);
         color: #222222;
         border-radius: 30px;
-        padding: 12px;
-        margin-left: -2px;
-        margin-right: -5px;
+        padding-left: 0px;
+        margin-right: 0px;
+      }
+      .add_bean {
+        width: 79px;
+        font-size: var(--c-zdwk-p);
+        line-height: var(--j-p-z-kco);
+        font-weight: var(--jx-zk-pv);
+        color: #222222;
+        border-radius: 30px;
+        padding-left: 0px;
+        margin-right: 0px;
+      }
+      .sign_up {
+        width: 85px;
+        font-size: var(--c-zdwk-p);
+        line-height: var(--j-p-z-kco);
+        font-weight: var(--jx-zk-pv);
+        color: #222222;
+        border-radius: 30px;
+        padding-left: 0px;
+        margin-right: 0px;
+      }
+      .log_in {
+        width: 60px;
+        font-size: var(--c-zdwk-p);
+        line-height: var(--j-p-z-kco);
+        font-weight: var(--jx-zk-pv);
+        color: #222222;
+        border-radius: 30px;
+        padding-left: -5px;
+        margin-right: 15px;
       }
       .header_profile_button {
         background: transparent;
@@ -150,5 +187,54 @@
 .toolbar {
   @media screen and (max-width: 600px) {
     margin-bottom: 0px;
+  }
+}
+.modalWrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  background-color: #ffffff;
+  transform: translate(-50%, -50%);
+  display: flex;
+  width: 650px;
+  height: 300px;
+  border-radius: 15px;
+  @media screen and (max-width: 600px) {
+    width: 100vw;
+    height: 310px;
+  }
+  .modalBody {
+    padding: 30px 30px 30px;
+    width: 100%;
+    display: flex;
+    margin-top: 25px;
+
+    flex-direction: column;
+    .modalHeader {
+      font-weight: 600;
+      font-size: 20px;
+
+      @media screen and (max-width: 600px) {
+        font-size: 16px;
+      }
+    }
+    li {
+      font-size: 17px;
+      text-indent: 10px;
+      line-height: 25px;
+
+      @media screen and (max-width: 600px) {
+        font-size: 15px;
+        line-height: 30px;
+      }
+    }
+    .text {
+      font-size: 17px;
+
+      @media screen and (max-width: 600px) {
+        font-size: 15px;
+        line-height: 23px;
+      }
+    }
   }
 }

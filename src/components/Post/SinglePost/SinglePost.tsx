@@ -26,30 +26,32 @@ const SinglePost: React.FunctionComponent<IProps> = ({ beanContent }) => {
           </div>
         </Box>
         <Box sx={{ mt: 1 }}>
-          <Stack direction="row" justifyContent="space-between">
-            <Typography variant="h6" color="inherit" className={styles._title}>
-              {beanContent.beanName}
+          <div style={{ paddingLeft: "2px", paddingRight: "2px" }}>
+            <Stack direction="row" justifyContent="space-between">
+              <Typography variant="h6" color="inherit" className={styles._title}>
+                {beanContent.beanName}
+              </Typography>
+              {strHasLength(beanContent.avgRating) ? (
+                <>
+                  <Stack direction="row" spacing={1} alignItems="center" className={styles._rating}>
+                    <StarIcon style={{ marginTop: "-3px", width: "20px" }} />{" "}
+                    <span style={{ marginLeft: "-0.1px", marginRight: "2px" }}>{Number(beanContent.avgRating).toFixed(2)}</span>
+                  </Stack>
+                </>
+              ) : (
+                <div></div>
+              )}
+            </Stack>
+            <Typography variant="h6" color="inherit" className={styles._subtitle}>
+              {beanContent.companyName}
             </Typography>
-            {strHasLength(beanContent.avgRating) ? (
-              <>
-                <Stack direction="row" spacing={1} alignItems="center" className={styles._rating}>
-                  <StarIcon style={{ marginTop: "-3px", width: "20px" }} />{" "}
-                  <span style={{ marginLeft: "-0.1px", marginRight: "2px" }}>{Number(beanContent.avgRating).toFixed(2)}</span>
-                </Stack>
-              </>
-            ) : (
-              <div></div>
-            )}
-          </Stack>
-          <Typography variant="h6" color="inherit" className={styles._subtitle}>
-            {beanContent.companyName}
-          </Typography>
-          <Typography variant="h6" color="inherit" className={styles._date}>
-            {beanContent.headquarter}
-          </Typography>
-          <Typography variant="h6" color="inherit" className={styles._price}>
-            <span style={{ fontWeight: "bold" }}>{beanContent.numReviews}</span> Reviews
-          </Typography>
+            <Typography variant="h6" color="inherit" className={styles._date}>
+              {beanContent.headquarter}
+            </Typography>
+            <Typography variant="h6" color="inherit" className={styles._price}>
+              <span style={{ fontWeight: "bold" }}>{beanContent.numReviews}</span> {Number(beanContent.numReviews) > 1 ? `  Reviews` : `  Review`}
+            </Typography>
+          </div>
         </Box>
       </CardContent>
     </Card>
