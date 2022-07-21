@@ -6,7 +6,16 @@
     display: none;
     @media screen and (max-width: 599px) {
       display: flex;
+      padding-top: 10px;
       justify-content: flex-end;
+    }
+    .buy_bean_mobile {
+      display: none;
+
+      @media screen and (max-width: 599px) {
+        margin-left: 5px;
+        margin-right: 5px;
+      }
     }
   }
 
@@ -39,7 +48,15 @@
     }
     .share_web {
       margin-left: 27px;
-      margin-right: 7px;
+      margin-right: 0px;
+      font: inherit;
+      @media screen and (max-width: 599px) {
+        display: none;
+      }
+    }
+    .buy_bean_web {
+      margin-left: 15px;
+      margin-right: 5px;
       font: inherit;
       @media screen and (max-width: 599px) {
         display: none;
@@ -47,8 +64,8 @@
     }
   }
   ._image {
-    width: 30vw;
-    height: 30vw;
+    width: 32vw;
+    height: 32vw;
     border-radius: 15px;
     margin-top: 10px;
     margin-bottom: 10px;
@@ -135,8 +152,7 @@
       margin-right: 15px;
       margin-bottom: 15px;
 
-      height: 180px;
-      overflow-y: scroll;
+      height: auto;
       @media screen and (max-width: 599px) {
         margin-top: 10px;
         margin-bottom: 5px;
@@ -172,8 +188,6 @@
       margin-right: 15px;
       margin-bottom: 15px;
 
-      height: 180px;
-      overflow-y: scroll;
       @media screen and (max-width: 599px) {
         margin-top: 10px;
         margin-bottom: 5px;

@@ -70,6 +70,9 @@
         display: none;
         width: 100%;
 
+        .mobile_lets_chat {
+          margin-right: -10px;
+        }
         .mobile_add_bean {
           margin-right: -10px;
         }
@@ -143,5 +146,54 @@
 .toolbar {
   @media screen and (max-width: 600px) {
     margin-bottom: 0px;
+  }
+}
+.modalWrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  background-color: #ffffff;
+  transform: translate(-50%, -50%);
+  display: flex;
+  width: 650px;
+  height: 300px;
+  border-radius: 15px;
+  @media screen and (max-width: 600px) {
+    width: 100vw;
+    height: 310px;
+  }
+  .modalBody {
+    padding: 30px 30px 30px;
+    width: 100%;
+    display: flex;
+    margin-top: 25px;
+
+    flex-direction: column;
+    .modalHeader {
+      font-weight: 600;
+      font-size: 20px;
+
+      @media screen and (max-width: 600px) {
+        font-size: 16px;
+      }
+    }
+    li {
+      font-size: 17px;
+      text-indent: 10px;
+      line-height: 25px;
+
+      @media screen and (max-width: 600px) {
+        font-size: 15px;
+        line-height: 30px;
+      }
+    }
+    .text {
+      font-size: 17px;
+
+      @media screen and (max-width: 600px) {
+        font-size: 15px;
+        line-height: 23px;
+      }
+    }
   }
 }

@@ -1,4 +1,4 @@
-import { Grid, Stack, Button, Divider, Typography } from "@mui/material";
+import { Grid, Stack, Button, Modal, Typography } from "@mui/material";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -8,6 +8,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import useScrollTrigger from "@mui/material/useScrollTrigger";
 import Box from "@mui/material/Box";
 import MenuIcon from "@mui/icons-material/Menu";
+import CloseIcon from "@mui/icons-material/Close";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -39,6 +40,8 @@ const Header = (props: { children: any; window: any }) => {
 
   const [isSignupOrLoginClicked, setIsSignupOrLoginClicked] = useState(false);
 
+  const [modalOpen, setModalOpen] = useState(false);
+
   const userEmail = localStorage?.getItem("userEmail") ?? "";
   const userFirstName = localStorage?.getItem("userFirstname") ?? "";
   const userUUID = localStorage?.getItem("userUUID") ?? "";
@@ -51,7 +54,8 @@ const Header = (props: { children: any; window: any }) => {
   };
 
   const handleAddBeanClick = (): void => {
-    isLoggedin(userEmail, userUUID) ? navigate(BaseRoutes.Add_Bean) : setIsSignupOrLoginClicked(true);
+    // isLoggedin(userEmail, userUUID) ? navigate(BaseRoutes.Add_Bean) : setIsSignupOrLoginClicked(true);
+    navigate(BaseRoutes.Add_Bean);
   };
 
   const handleSignupOrLoginClick = () => {
@@ -68,6 +72,14 @@ const Header = (props: { children: any; window: any }) => {
   };
   const handleSignupOrLoginClose = () => {
     setIsSignupOrLoginClicked(false);
+  };
+
+  const handleModalOpen = () => {
+    setModalOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setModalOpen(false);
   };
 
   return (
@@ -102,6 +114,9 @@ const Header = (props: { children: any; window: any }) => {
 
                     <div>
                       <Stack direction="row" spacing={1}>
+                        <Button variant="text" color="inherit" className={styles.mobile_lets_chat} onClick={handleModalOpen}>
+                          Let's Chat!
+                        </Button>
                         <Button variant="text" color="inherit" className={styles.mobile_add_bean} onClick={handleAddBeanClick}>
                           Add Bean
                         </Button>
@@ -129,6 +144,9 @@ const Header = (props: { children: any; window: any }) => {
               </Grid>
               <Grid item xs={12} md={4} sm={4} className={styles.header_post_profile_wrapper}>
                 <Stack direction="row" spacing={2}>
+                  <Button variant="text" color="inherit" className={styles.header_button} onClick={handleModalOpen}>
+                    Let's Chat!
+                  </Button>
                   <Button variant="text" color="inherit" className={styles.header_button} onClick={handleAddBeanClick}>
                     Add Bean
                   </Button>
@@ -258,6 +276,36 @@ const Header = (props: { children: any; window: any }) => {
         </>
       </AppBar>
       <Toolbar className={styles.toolbar} />
+      <Modal open={modalOpen} onClose={handleModalClose}>
+        <div className={styles.modalWrapper}>
+          <CloseIcon onClick={handleModalClose} style={{ position: "absolute", top: "3%", right: "2%" }} />
+
+          <div className={styles.modalBody}>
+            <Typography className={styles.modalHeader}>Choose one of three methods below to chat with Eric, who built this website:</Typography>
+            <br />
+            <li>
+              1. Talk to Eric on{" "}
+              <a href="https://www.instagram.com/echoi33/" target="_blank">
+                Instagram
+              </a>
+            </li>
+            <li>
+              2. Talk to Eric on{" "}
+              <a href="https://twitter.com/echoi333" target="_blank">
+                Twitter
+              </a>
+            </li>
+            <li>
+              3. Email to{" "}
+              <a href={`mailto:echoi3@alumni.nd.edu`} target="_blank">
+                echoi3@alumni.nd.edu
+              </a>
+            </li>
+            <br />
+            <div className={styles.text}>Can't wait to get to know you and collect your feedback! :)</div>
+          </div>
+        </div>
+      </Modal>
     </>
   );
 };

@@ -1,6 +1,7 @@
 import StarIcon from "@mui/icons-material/Star";
 import IosShareIcon from "@mui/icons-material/IosShare";
-import { Box, Rating, Grid, Typography } from "@mui/material";
+import CoffeeIcon from "@mui/icons-material/Coffee";
+import { Box, Rating, Grid, Typography, Link, autocompleteClasses } from "@mui/material";
 import { Button, Container, TextField, makeStyles, Snackbar } from "@material-ui/core";
 
 import React, { useEffect, useState } from "react";
@@ -53,8 +54,11 @@ const useStyles = makeStyles(theme => ({
     fontSize: "1.2rem",
   },
   labelRoot: {
+    width: "auto",
     marginTop: "-10px",
     lineHeight: "20px",
+    paddingLeft: "2px",
+    paddingRight: "15px",
     "&$labelFocused": {},
   },
   labelFocused: {},
@@ -109,7 +113,7 @@ const EachBean = () => {
 
   const location: any = useLocation();
 
-  // useScrollToTop();
+  useScrollToTop();
 
   useEffect(() => {
     const fetchBeanPost = async (): Promise<void> => {
@@ -223,7 +227,33 @@ const EachBean = () => {
   return (
     <div className={styles._wrapper}>
       <HeaderForContent children={undefined} window={undefined} beanContent={_beanContent} href={window.location.href} />
+
       <div className={styles.share_mobile}>
+        {strHasLength(_beanContent.productLink) ? (
+          <div>
+            <Link
+              style={{
+                font: "inherit",
+                fontWeight: "600",
+                fontSize: "15px",
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                textDecoration: "none",
+                textTransform: "none",
+              }}
+              href={_beanContent.productLink}
+              target="_blank"
+            >
+              <div style={{ display: "flex", paddingTop: "5px", color: "#222222", marginRight: "8px" }}>
+                <CoffeeIcon fontSize="small" style={{ marginTop: "0px", marginRight: "3px", color: "#222222" }} />{" "}
+                <span style={{ color: "#222222", textDecoration: "underline" }}>Buy </span>
+              </div>
+            </Link>
+          </div>
+        ) : (
+          <div></div>
+        )}
         <RWebShare
           data={{
             text: `${_beanContent.beanName} by ${_beanContent.companyName} and its reviews`,
@@ -235,7 +265,7 @@ const EachBean = () => {
         >
           <button style={{ font: "inherit", fontWeight: "600", fontSize: "15px", background: "none", border: "none", cursor: "pointer" }}>
             <div style={{ display: "flex", marginTop: "2px", color: "#222222" }}>
-              <IosShareIcon fontSize="small" style={{ marginTop: "2px", marginRight: "3px", color: "#222222" }} />{" "}
+              <IosShareIcon fontSize="small" style={{ marginTop: "1px", marginRight: "3px", color: "#222222" }} />{" "}
               <span style={{ color: "#222222", textDecoration: "underline", marginRight: "12px", paddingTop: "3px" }}>Share</span>
             </div>
           </button>
@@ -253,10 +283,7 @@ const EachBean = () => {
             }}
             display="block"
           >
-            <a href={_beanContent?.productLink ?? ""} style={{ textDecoration: "none", color: "#222222" }} target="_blank">
-              {" "}
-              {_beanContent.beanName} by {_beanContent.companyName}{" "}
-            </a>
+            {_beanContent.beanName} by {_beanContent.companyName}{" "}
           </Typography>
         </Grid>
         <Grid container order={{ xs: 3, sm: 2, md: 2, lg: 2 }} direction="column" className={styles.ratings_and_review}>
@@ -287,7 +314,7 @@ const EachBean = () => {
                   marginLeft: "3px",
                 }}
               >
-                {_numReviews} Reviews
+                {Number(_numReviews) > 1 ? `${_numReviews} Reviews` : `${_numReviews} Review`}
               </Typography>
               <Typography style={{ fontSize: "15px", fontWeight: "600" }}> {strHasLength(_beanContent.headquarter) ? `·  ${_beanContent.headquarter}` : ""}</Typography>
               <div className={styles.share_web}>
@@ -308,6 +335,31 @@ const EachBean = () => {
                   </button>
                 </RWebShare>
               </div>
+              {strHasLength(_beanContent.productLink) ? (
+                <div className={styles.buy_bean_web}>
+                  <Link
+                    style={{
+                      font: "inherit",
+                      fontWeight: "600",
+                      fontSize: "15px",
+                      background: "none",
+                      border: "none",
+                      cursor: "pointer",
+                      textDecoration: "none",
+                      textTransform: "none",
+                    }}
+                    href={_beanContent.productLink}
+                    target="_blank"
+                  >
+                    <div style={{ display: "flex", marginTop: "2px", color: "#222222" }}>
+                      <CoffeeIcon fontSize="small" style={{ marginTop: "-1px", marginRight: "3px", color: "#222222" }} />{" "}
+                      <span style={{ color: "#222222", textDecoration: "underline" }}>Buy </span>
+                    </div>
+                  </Link>
+                </div>
+              ) : (
+                <div></div>
+              )}
             </div>
           </Grid>
         </Grid>
@@ -340,7 +392,7 @@ const EachBean = () => {
                 marginLeft: "3px",
               }}
             >
-              {_numReviews} Reviews
+              {Number(_numReviews) > 1 ? `${_numReviews} Reviews` : `${_numReviews} Review`}
             </Typography>
           </div>
         </Grid>
@@ -367,7 +419,7 @@ const EachBean = () => {
                       sx={{
                         fontSize: "30px",
                         "@media screen and (max-width: 600px)": {
-                          fontSize: "50px",
+                          fontSize: "45px",
                         },
                       }}
                       onChange={(event, newValue) => {
@@ -434,7 +486,26 @@ const EachBean = () => {
             _comments.map(comment =>
               strHasLength(comment.comment) ? (
                 <Grid xs={12} sm={5.7} className={comment.userEmail === userEmail ? styles.my_comment_wrapper : styles.each_comment_wrapper}>
-                  <Typography className={styles.first_name}>{comment?.userName ?? ""}</Typography>
+                  <div style={{ display: "flex" }}>
+                    <Typography className={styles.first_name}>{comment?.userName ?? ""}</Typography>
+                    <Rating
+                      name="text-feedback"
+                      value={Number(comment.rating)}
+                      precision={0.5}
+                      getLabelText={getLabelText}
+                      sx={{
+                        paddingLeft: "5px",
+                        paddingTop: "2px",
+                        fontSize: "25px",
+                        "@media screen and (max-width: 600px)": {
+                          paddingLeft: "3px",
+                          paddingTop: "5px",
+                          fontSize: "20px",
+                        },
+                      }}
+                      emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
+                    />
+                  </div>
                   <Typography className={styles.date}>{comment.timeStamp}</Typography>
                   <Typography className={styles.comment_content}>{comment.comment}</Typography>
                 </Grid>

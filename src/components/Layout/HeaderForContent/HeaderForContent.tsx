@@ -1,10 +1,11 @@
-import { Grid, Stack, Button, Divider, Typography } from "@mui/material";
+import { Grid, Stack, Button, Modal, Typography } from "@mui/material";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import { googleLogout } from "@react-oauth/google";
+import CloseIcon from "@mui/icons-material/Close";
 
 import SearchBox from "../../common/SearchBox";
 import LogInOrSignup from "../../LogInOrSignup/LogInOrSignup";
@@ -45,6 +46,8 @@ const HeaderForContent: React.FunctionComponent<IProps> = ({ children, window, b
 
   const [isSignupOrLoginClicked, setIsSignupOrLoginClicked] = useState(false);
 
+  const [modalOpen, setModalOpen] = useState(false);
+
   const userEmail = localStorage?.getItem("userEmail") ?? "";
   const userFirstName = localStorage?.getItem("userFirstname") ?? "";
   const userUUID = localStorage?.getItem("userUUID") ?? "";
@@ -54,6 +57,7 @@ const HeaderForContent: React.FunctionComponent<IProps> = ({ children, window, b
   };
 
   const handleAddBeanClick = (): void => {
+    // isLoggedin(userEmail, userUUID) ? navigate(BaseRoutes.Add_Bean) : setIsSignupOrLoginClicked(true);
     navigate(BaseRoutes.Add_Bean);
   };
 
@@ -72,6 +76,14 @@ const HeaderForContent: React.FunctionComponent<IProps> = ({ children, window, b
 
   const handleSignupOrLoginClose = () => {
     setIsSignupOrLoginClicked(false);
+  };
+
+  const handleModalOpen = () => {
+    setModalOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setModalOpen(false);
   };
 
   return (
@@ -96,20 +108,23 @@ const HeaderForContent: React.FunctionComponent<IProps> = ({ children, window, b
 
                     <div>
                       <Stack direction="row" spacing={1}>
-                        <Button variant="text" color="inherit" className={styles.mobile_add_bean} onClick={handleAddBeanClick}>
+                        <Button variant="text" color="inherit" className={styles.mobile_lets_chat} onTouchStart={handleModalOpen} onClick={handleModalOpen}>
+                          Let's Chat!
+                        </Button>
+                        <Button variant="text" color="inherit" className={styles.mobile_add_bean} onTouchStart={handleAddBeanClick} onClick={handleAddBeanClick}>
                           Add Bean
                         </Button>
                         {isLoggedin(userEmail, userUUID) ? (
-                          <Button variant="text" color="inherit" className={styles.mobile_log_out} onClick={handleLogOutClick}>
+                          <Button variant="text" color="inherit" className={styles.mobile_log_out} onTouchStart={handleLogOutClick} onClick={handleLogOutClick}>
                             Log Out
                           </Button>
                         ) : (
                           <>
                             {" "}
-                            <Button variant="text" color="inherit" className={styles.mobile_sign_up} onClick={handleSignupOrLoginClick}>
+                            <Button variant="text" color="inherit" className={styles.mobile_sign_up} onTouchStart={handleSignupOrLoginClick} onClick={handleSignupOrLoginClick}>
                               Sign up
                             </Button>
-                            <Button variant="text" color="inherit" className={styles.mobile_log_in} onClick={handleSignupOrLoginClick}>
+                            <Button variant="text" color="inherit" className={styles.mobile_log_in} onTouchStart={handleSignupOrLoginClick} onClick={handleSignupOrLoginClick}>
                               Log In{" "}
                             </Button>
                           </>
@@ -120,23 +135,26 @@ const HeaderForContent: React.FunctionComponent<IProps> = ({ children, window, b
                 </div>
               </Grid>
               <Grid item xs={12} md={4} sm={6} className={styles.header_sarch_box}>
-                <SearchBox />
+                {/* <SearchBox /> */}
               </Grid>
               <Grid item xs={12} md={4} sm={4} className={styles.header_post_profile_wrapper}>
                 <Stack direction="row" spacing={2}>
-                  <Button variant="text" color="inherit" className={styles.header_button} onClick={handleAddBeanClick}>
+                  <Button variant="text" color="inherit" className={styles.lets_chat} onClick={handleModalOpen}>
+                    Let's Chat!
+                  </Button>
+                  <Button variant="text" color="inherit" className={styles.add_bean} onClick={handleAddBeanClick}>
                     Add Bean
                   </Button>
                   {isLoggedin(userEmail, userUUID) ? (
-                    <Button variant="text" color="inherit" className={styles.header_button} onClick={handleLogOutClick}>
+                    <Button variant="text" color="inherit" className={styles.sign_up} onClick={handleLogOutClick}>
                       Log Out
                     </Button>
                   ) : (
                     <>
-                      <Button variant="text" color="inherit" className={styles.header_button} onClick={handleSignupOrLoginClick}>
+                      <Button variant="text" color="inherit" className={styles.sign_up} onClick={handleSignupOrLoginClick}>
                         Sign Up
                       </Button>
-                      <Button variant="text" color="inherit" className={styles.header_button} onClick={handleSignupOrLoginClick}>
+                      <Button variant="text" color="inherit" className={styles.log_in} onClick={handleSignupOrLoginClick}>
                         Log In
                       </Button>
                     </>
@@ -252,6 +270,36 @@ const HeaderForContent: React.FunctionComponent<IProps> = ({ children, window, b
         </>
       </AppBar>
       <Toolbar className={styles.toolbar} />
+      <Modal open={modalOpen} onClose={handleModalClose}>
+        <div className={styles.modalWrapper}>
+          <CloseIcon onClick={handleModalClose} style={{ position: "absolute", top: "3%", right: "2%" }} />
+
+          <div className={styles.modalBody}>
+            <Typography className={styles.modalHeader}>Choose one of three methods below to chat with Eric, who built this website:</Typography>
+            <br />
+            <li>
+              1. Talk to Eric on{" "}
+              <a href="https://www.instagram.com/echoi33/" target="_blank">
+                Instagram
+              </a>
+            </li>
+            <li>
+              2. Talk to Eric on{" "}
+              <a href="https://twitter.com/echoi333" target="_blank">
+                Twitter
+              </a>
+            </li>
+            <li>
+              3. Email to{" "}
+              <a href={`mailto:echoi3@alumni.nd.edu`} target="_blank">
+                echoi3@alumni.nd.edu
+              </a>
+            </li>
+            <br />
+            <div className={styles.text}>Can't wait to get to know you and collect your feedback! :)</div>
+          </div>
+        </div>
+      </Modal>
     </>
   );
 };
