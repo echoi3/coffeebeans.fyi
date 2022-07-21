@@ -17,6 +17,7 @@ import { listHasLength } from "src/utils/list";
 import { uploadToS3 } from "src/db/s3";
 import { BaseRoutes } from "src/routes/constants";
 import { createCompany, getAllCompanies } from "src/db/company";
+import FooterForContent from "../Layout/FooterForContent/FooterForContent";
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -51,7 +52,7 @@ const useStyles = makeStyles(theme => ({
     fontSize: "1.2rem",
   },
   preview: {
-    width: "500%",
+    width: "500px",
     fullWidth: "true",
   },
 }));
@@ -254,9 +255,8 @@ const AddBean = () => {
                   variant="outlined"
                   margin="normal"
                   fullWidth
-                  required
-                  label="URL of the product?"
-                  helperText="example: https://monorailespresso.com/products/costa-rica-single-origin"
+                  label="(Optional) URL of the product?"
+                  helperText="ex: https://monorailespresso.com/products/costa-rica-single-origin"
                   value={productLink}
                   onInput={e => setProductLink((e?.target as HTMLInputElement).value)}
                 />
@@ -272,7 +272,11 @@ const AddBean = () => {
                 <DropzoneArea
                   dropzoneText="Please upload a nice pic of the bean! (square size image preferred)"
                   previewText="Looks Good"
+                  previewGridClasses={{
+                    image: classes.preview,
+                  }}
                   filesLimit={1}
+                  maxFileSize={7000000}
                   onChange={handleFileUpload}
                   getFileAddedMessage={() => "File successfully added. Looks good!"}
                 />
@@ -295,6 +299,7 @@ const AddBean = () => {
           </Grid>
         </Grid>
       </Grid>
+      <FooterForContent />
     </div>
   );
 };

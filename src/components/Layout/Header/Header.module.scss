@@ -70,6 +70,19 @@
         display: none;
         width: 100%;
 
+        .mobile_add_bean {
+          margin-right: -10px;
+        }
+        .mobile_sign_up {
+          margin-right: -15px;
+        }
+        .mobile_log_in {
+          margin-right: -5px;
+        }
+        .mobile_log_out {
+          margin-right: 0px;
+        }
+
         svg {
           color: var(--ihf-tp-q);
           display: inline-block;

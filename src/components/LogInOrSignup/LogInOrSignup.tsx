@@ -1,8 +1,8 @@
 import { TransitionProps } from "@material-ui/core/transitions";
-import { Button, CardActions, Dialog, DialogTitle, Grid, List, ListItem, ListItemAvatar, ListItemText, Typography, Divider } from "@mui/material";
+import { Button, Snackbar, Dialog, DialogTitle, Grid, List, ListItem, ListItemAvatar, ListItemText, Typography, Divider } from "@mui/material";
 import { makeStyles } from "@material-ui/core/styles";
 
-import React from "react";
+import React, { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 import styles from "./LogInOrSignup.module.scss";
@@ -31,10 +31,24 @@ const useDialogStyles = makeStyles(theme => ({
       width: "750px",
     },
   },
+  snackbarRoot: {
+    background: "#c4252c",
+    backgroundColor: "#c4252c",
+    textAlign: "center",
+    justifyContent: "center",
+    fontSize: "1.2rem",
+
+    [theme?.breakpoints.up("xs")]: {
+      minWidth: "10vw",
+      width: "750px",
+    },
+  },
 }));
 
 const LogInOrSignup = (props: any) => {
   const dialogClasses = useDialogStyles();
+
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   const { onClose, open } = props;
 
@@ -74,6 +88,7 @@ const LogInOrSignup = (props: any) => {
 
         await createAccount({ uuid: userUUID, email, firstName, lastName });
         onClose();
+        setSnackbarOpen(true);
 
         try {
           await fetch("/api/sign-up", {
@@ -88,6 +103,7 @@ const LogInOrSignup = (props: any) => {
         }
       }
       onClose();
+      setSnackbarOpen(true);
 
       // refreshTokenSetup(res);
     },
@@ -97,65 +113,70 @@ const LogInOrSignup = (props: any) => {
     onClose();
   };
 
-  return (
-    <Dialog onClose={handleClose} open={open} classes={dialogClasses}>
-      <DialogTitle style={{ display: "flex" }}>
-        <Grid container>
-          <Grid item xs={1} onClick={handleClose}>
-            <CloseIcon className={styles.close_button} />
-          </Grid>
-          <Grid item xs={10}>
-            <Typography
-              className={styles.login_or_signup}
-              style={{
-                fontWeight: "600",
-                fontSize: "16px",
-                justifyContent: "center",
-                textAlign: "center",
-              }}
-            >
-              {" "}
-              Log in or sign up
-            </Typography>
-          </Grid>
-        </Grid>
-      </DialogTitle>
-      <Divider />
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
 
-      <DialogTitle>
-        <Typography style={{ fontWeight: "600", fontSize: "22px" }}>
-          Welcome to <span style={{ color: "#c4252c" }}>coffeebeans.fyi</span>
-        </Typography>
-      </DialogTitle>
-      <List className={styles.google_signup_wrapper}>
-        <ListItem>
-          <ListItemAvatar>
-            <Grid container direction="column" justifyContent="center" alignItems="center" textAlign="center">
-              <Grid item xs={12}>
-                <Button
-                  onClick={() => login()}
-                  variant="text"
-                  color="inherit"
-                  className={styles.google_signup_button}
-                  style={{
-                    border: "1.2px solid",
-                    borderRadius: "0.7rem",
-                  }}
-                >
-                  <Grid container>
-                    {" "}
-                    <Grid item xs={1}>
-                      <img src={GoogleLogo} alt="google sign up" className={styles.google_logo} />
-                    </Grid>
-                    <Grid item xs={11} className={styles.google_logo_text}>
-                      {" "}
-                      Continue with Google
-                    </Grid>
-                  </Grid>
-                </Button>
-              </Grid>
+  return (
+    <>
+      <Dialog onClose={handleClose} open={open} classes={dialogClasses}>
+        <DialogTitle style={{ display: "flex" }}>
+          <Grid container>
+            <Grid item xs={1} onClick={handleClose}>
+              <CloseIcon className={styles.close_button} />
             </Grid>
-            {/* <GoogleLogin
+            <Grid item xs={10}>
+              <Typography
+                className={styles.login_or_signup}
+                style={{
+                  fontWeight: "600",
+                  fontSize: "16px",
+                  justifyContent: "center",
+                  textAlign: "center",
+                }}
+              >
+                {" "}
+                Log in or sign up
+              </Typography>
+            </Grid>
+          </Grid>
+        </DialogTitle>
+        <Divider />
+
+        <DialogTitle>
+          <Typography style={{ fontWeight: "600", fontSize: "22px" }}>
+            Welcome to <span style={{ color: "#c4252c" }}>coffeebeans.fyi</span>
+          </Typography>
+        </DialogTitle>
+        <List className={styles.google_signup_wrapper}>
+          <ListItem>
+            <ListItemAvatar>
+              <Grid container direction="column" justifyContent="center" alignItems="center" textAlign="center">
+                <Grid item xs={12}>
+                  <Button
+                    onClick={() => login()}
+                    variant="text"
+                    color="inherit"
+                    className={styles.google_signup_button}
+                    style={{
+                      border: "1.2px solid",
+                      borderRadius: "0.7rem",
+                    }}
+                  >
+                    <Grid container>
+                      {" "}
+                      <Grid item xs={1}>
+                        <img src={GoogleLogo} alt="google sign up" className={styles.google_logo} />
+                      </Grid>
+                      <Grid item xs={11} className={styles.google_logo_text}>
+                        {" "}
+                        Continue with Google
+                      </Grid>
+                    </Grid>
+                  </Button>
+                </Grid>
+              </Grid>
+              {/* <GoogleLogin
               clientId={`${process.env.REACT_APP_GOOGLE_AUTH_CLIENT_ID}`}
               buttonText="Continue with Google"
               onSuccess={handleSignUpSuccess}
@@ -189,7 +210,7 @@ const LogInOrSignup = (props: any) => {
                 </>
               )}
             /> */}
-            {/* <div className={styles.google_signup_button}>
+              {/* <div className={styles.google_signup_button}>
               <GoogleLogin
                 onSuccess={handleSignUpSuccess}
                 onError={() => {
@@ -201,18 +222,19 @@ const LogInOrSignup = (props: any) => {
                 logo_alignment="left"
               />
             </div> */}
-          </ListItemAvatar>
-          <ListItemText />
-        </ListItem>
+            </ListItemAvatar>
+            <ListItemText />
+          </ListItem>
 
-        {/* <ListItem autoFocus button>
+          {/* <ListItem autoFocus button>
           <ListItemAvatar>
             <Avatar></Avatar>
           </ListItemAvatar>
           <ListItemText primary="Add account" />
         </ListItem> */}
-      </List>
-    </Dialog>
+        </List>
+      </Dialog>
+    </>
   );
 };
 

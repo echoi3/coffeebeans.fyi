@@ -8,7 +8,7 @@ export enum BaseRoutes {
   Home = "/",
   My_Account = "/my-account",
   Our_Story = "/our-story",
-  Terms = "/terms",
+  Terms = "/terms-of-service",
   Privacy = "/privacy",
   Payment = "/payment",
 }

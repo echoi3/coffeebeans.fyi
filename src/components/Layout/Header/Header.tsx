@@ -51,7 +51,7 @@ const Header = (props: { children: any; window: any }) => {
   };
 
   const handleAddBeanClick = (): void => {
-    navigate(BaseRoutes.Add_Bean);
+    isLoggedin(userEmail, userUUID) ? navigate(BaseRoutes.Add_Bean) : setIsSignupOrLoginClicked(true);
   };
 
   const handleSignupOrLoginClick = () => {
@@ -102,16 +102,19 @@ const Header = (props: { children: any; window: any }) => {
 
                     <div>
                       <Stack direction="row" spacing={1}>
+                        <Button variant="text" color="inherit" className={styles.mobile_add_bean} onClick={handleAddBeanClick}>
+                          Add Bean
+                        </Button>
                         {isLoggedin(userEmail, userUUID) ? (
-                          <Button variant="text" color="inherit" className={styles.header_button} onClick={handleLogOutClick}>
+                          <Button variant="text" color="inherit" className={styles.mobile_log_out} onClick={handleLogOutClick}>
                             Log Out
                           </Button>
                         ) : (
                           <>
-                            <Button variant="text" color="inherit" onClick={handleSignupOrLoginClick}>
+                            <Button variant="text" color="inherit" className={styles.mobile_sign_up} onClick={handleSignupOrLoginClick}>
                               Sign up
                             </Button>
-                            <Button variant="text" color="inherit" onClick={handleSignupOrLoginClick}>
+                            <Button variant="text" color="inherit" className={styles.mobile_log_in} onClick={handleSignupOrLoginClick}>
                               Log In{" "}
                             </Button>
                           </>
@@ -122,7 +125,7 @@ const Header = (props: { children: any; window: any }) => {
                 </div>
               </Grid>
               <Grid item xs={12} md={4} sm={6} className={styles.header_sarch_box}>
-                <SearchBox />
+                {/* <SearchBox /> */}
               </Grid>
               <Grid item xs={12} md={4} sm={4} className={styles.header_post_profile_wrapper}>
                 <Stack direction="row" spacing={2}>

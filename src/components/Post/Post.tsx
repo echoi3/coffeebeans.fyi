@@ -40,7 +40,8 @@ const Post: React.FunctionComponent = () => {
   useEffect(() => {
     const fetchBeanContents = async (): Promise<void> => {
       const beanContents: BeanContent[] = await getAllBeanContents();
-      setBeanContents(beanContents);
+      const sortedBeanContents: BeanContent[] = beanContents.sort((a, b) => (new Date(b.timeStamp) as any) - (new Date(a.timeStamp) as any));
+      setBeanContents(sortedBeanContents);
       setIsLoading(false);
     };
 

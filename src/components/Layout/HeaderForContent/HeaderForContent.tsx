@@ -96,17 +96,20 @@ const HeaderForContent: React.FunctionComponent<IProps> = ({ children, window, b
 
                     <div>
                       <Stack direction="row" spacing={1}>
+                        <Button variant="text" color="inherit" className={styles.mobile_add_bean} onClick={handleAddBeanClick}>
+                          Add Bean
+                        </Button>
                         {isLoggedin(userEmail, userUUID) ? (
-                          <Button variant="text" color="inherit" className={styles.header_button} onClick={handleLogOutClick}>
+                          <Button variant="text" color="inherit" className={styles.mobile_log_out} onClick={handleLogOutClick}>
                             Log Out
                           </Button>
                         ) : (
                           <>
                             {" "}
-                            <Button variant="text" color="inherit" onClick={handleSignupOrLoginClick}>
+                            <Button variant="text" color="inherit" className={styles.mobile_sign_up} onClick={handleSignupOrLoginClick}>
                               Sign up
                             </Button>
-                            <Button variant="text" color="inherit" onClick={handleSignupOrLoginClick}>
+                            <Button variant="text" color="inherit" className={styles.mobile_log_in} onClick={handleSignupOrLoginClick}>
                               Log In{" "}
                             </Button>
                           </>

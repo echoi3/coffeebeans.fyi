@@ -2,10 +2,10 @@ import { Stack, Typography } from "@mui/material";
 import React from "react";
 import LanguageIcon from "@mui/icons-material/Language";
 import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
-import styles from "./Footer.module.scss";
+import styles from "./FooterForContent.module.scss";
 import { useNavigate } from "react-router";
 import { BaseRoutes } from "src/routes/constants";
-const Footer: React.FC = () => {
+const FooterForContent: React.FC = () => {
   let navigate = useNavigate();
 
   const handleTermsClick = () => {
@@ -31,7 +31,7 @@ const Footer: React.FC = () => {
                   <li onClick={handleTermsClick}>Terms</li>
                   <a href={`mailto:eric.choi@coffeebeans.fyi`} target="_blank" style={{ textDecoration: "none" }}>
                     <li>Contact</li>
-                  </a>{" "}
+                  </a>
                 </ul>
               </Stack>
             </div>
@@ -52,4 +52,4 @@ const Footer: React.FC = () => {
   );
 };
 
-export default Footer;
+export default FooterForContent;
