@@ -57,8 +57,7 @@ const HeaderForContent: React.FunctionComponent<IProps> = ({ children, window, b
   };
 
   const handleAddBeanClick = (): void => {
-    // isLoggedin(userEmail, userUUID) ? navigate(BaseRoutes.Add_Bean) : setIsSignupOrLoginClicked(true);
-    navigate(BaseRoutes.Add_Bean);
+    isLoggedin(userEmail, userUUID) ? navigate(BaseRoutes.Add_Bean) : setIsSignupOrLoginClicked(true);
   };
 
   const handleSignupOrLoginClick = () => {
