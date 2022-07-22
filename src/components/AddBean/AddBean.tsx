@@ -186,9 +186,6 @@ const AddBean = () => {
       };
 
       setOpen(true);
-      setTimeout(() => {
-        navigate(BaseRoutes.Home);
-      }, 2000);
 
       uploadImageToServer(file as File);
       createBeanContent(beanContent);
@@ -197,6 +194,10 @@ const AddBean = () => {
       if (!allCompanies.includes(companyName)) {
         await createCompany({ companyName });
       }
+
+      setTimeout(() => {
+        navigate(BaseRoutes.Home);
+      }, 3000);
 
       try {
         await fetch("/api/post-bean", {
@@ -225,33 +226,10 @@ const AddBean = () => {
             <Grid xs={12} sm={11.6} className={styles.rating_wrapper}>
               <Grid container>
                 <Grid xs={12} sm={12}>
-                  <Typography className={styles.review_title}>Add Coffee Bean</Typography>
+                  <Typography className={styles.review_title}>Let's Add Coffee Bean :)</Typography>
                 </Grid>
 
                 <form className={classes.form} onSubmit={handleSubmit}>
-                  <Autocomplete
-                    fullWidth
-                    open={companyNameFieldOpen}
-                    onOpen={() => {
-                      if (companyName) {
-                        setCompanyNameFieldOpen(true);
-                      }
-                    }}
-                    onClose={() => setCompanyNameFieldOpen(false)}
-                    inputValue={companyName}
-                    onInputChange={(e, value, reason) => {
-                      setCompanyName(value);
-
-                      if (!value) {
-                        setCompanyNameFieldOpen(false);
-                      }
-                    }}
-                    freeSolo
-                    options={_uniqueCoffeeCompanies}
-                    getOptionLabel={option => option}
-                    renderInput={params => <TextField required {...params} label="Name of the company?" fullWidth margin="normal" variant="outlined" />}
-                  />
-
                   <Autocomplete
                     fullWidth
                     open={beanNameFieldOpen}
@@ -274,6 +252,28 @@ const AddBean = () => {
                     options={_uniqueBeans}
                     getOptionLabel={option => option}
                     renderInput={params => <TextField required {...params} label="Name of the coffee bean?" fullWidth margin="normal" variant="outlined" />}
+                  />
+                  <Autocomplete
+                    fullWidth
+                    open={companyNameFieldOpen}
+                    onOpen={() => {
+                      if (companyName) {
+                        setCompanyNameFieldOpen(true);
+                      }
+                    }}
+                    onClose={() => setCompanyNameFieldOpen(false)}
+                    inputValue={companyName}
+                    onInputChange={(e, value, reason) => {
+                      setCompanyName(value);
+
+                      if (!value) {
+                        setCompanyNameFieldOpen(false);
+                      }
+                    }}
+                    freeSolo
+                    options={_uniqueCoffeeCompanies}
+                    getOptionLabel={option => option}
+                    renderInput={params => <TextField required {...params} label="Name of the company?" fullWidth margin="normal" variant="outlined" />}
                   />
 
                   <TextField
@@ -325,7 +325,7 @@ const AddBean = () => {
                         root: classes.root,
                       },
                     }}
-                    message={isError ? "Please upload the image" : "Love it! Thank you :)"}
+                    message={isError ? "Please upload the image" : "Love it! Thank you so much :)"}
                   ></Snackbar>
                 </form>
               </Grid>
