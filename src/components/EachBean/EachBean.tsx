@@ -317,6 +317,31 @@ const EachBean = () => {
                 {Number(_numReviews) > 1 ? `${_numReviews} Reviews` : `${_numReviews} Review`}
               </Typography>
               <Typography style={{ fontSize: "15px", fontWeight: "600" }}> {strHasLength(_beanContent.headquarter) ? `·  ${_beanContent.headquarter}` : ""}</Typography>
+              {strHasLength(_beanContent.productLink) ? (
+                <div className={styles.buy_bean_web}>
+                  <Link
+                    style={{
+                      font: "inherit",
+                      fontWeight: "600",
+                      fontSize: "15px",
+                      background: "none",
+                      border: "none",
+                      cursor: "pointer",
+                      textDecoration: "none",
+                      textTransform: "none",
+                    }}
+                    href={_beanContent.productLink}
+                    target="_blank"
+                  >
+                    <div style={{ display: "flex", marginTop: "2px", color: "#222222" }}>
+                      <CoffeeIcon fontSize="small" style={{ marginTop: "0px", marginRight: "3px", color: "#222222" }} />{" "}
+                      <span style={{ color: "#222222", textDecoration: "underline" }}>Buy </span>
+                    </div>
+                  </Link>
+                </div>
+              ) : (
+                <div></div>
+              )}
               <div className={styles.share_web}>
                 <RWebShare
                   data={{
@@ -335,31 +360,6 @@ const EachBean = () => {
                   </button>
                 </RWebShare>
               </div>
-              {strHasLength(_beanContent.productLink) ? (
-                <div className={styles.buy_bean_web}>
-                  <Link
-                    style={{
-                      font: "inherit",
-                      fontWeight: "600",
-                      fontSize: "15px",
-                      background: "none",
-                      border: "none",
-                      cursor: "pointer",
-                      textDecoration: "none",
-                      textTransform: "none",
-                    }}
-                    href={_beanContent.productLink}
-                    target="_blank"
-                  >
-                    <div style={{ display: "flex", marginTop: "2px", color: "#222222" }}>
-                      <CoffeeIcon fontSize="small" style={{ marginTop: "-1px", marginRight: "3px", color: "#222222" }} />{" "}
-                      <span style={{ color: "#222222", textDecoration: "underline" }}>Buy </span>
-                    </div>
-                  </Link>
-                </div>
-              ) : (
-                <div></div>
-              )}
             </div>
           </Grid>
         </Grid>

@@ -42,14 +42,17 @@ const SinglePost: React.FunctionComponent<IProps> = ({ beanContent }) => {
                 <div></div>
               )}
             </Stack>
-            <Typography variant="h6" color="inherit" className={styles._subtitle}>
-              {beanContent.companyName}
-            </Typography>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <Typography variant="h6" color="inherit" className={styles._subtitle}>
+                {beanContent.companyName}
+              </Typography>
+              <Typography variant="h6" color="inherit" className={styles._price}>
+                <span style={{ fontWeight: "bold" }}>{beanContent.numReviews}</span> {Number(beanContent.numReviews) > 1 ? `  Reviews` : `  Review`}
+              </Typography>
+            </div>
+
             <Typography variant="h6" color="inherit" className={styles._date}>
               {beanContent.headquarter}
-            </Typography>
-            <Typography variant="h6" color="inherit" className={styles._price}>
-              <span style={{ fontWeight: "bold" }}>{beanContent.numReviews}</span> {Number(beanContent.numReviews) > 1 ? `  Reviews` : `  Review`}
             </Typography>
           </div>
         </Box>
