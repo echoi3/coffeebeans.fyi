@@ -20,6 +20,7 @@ import { listHasLength } from "src/utils/list";
 import LogInOrSignup from "../LogInOrSignup/LogInOrSignup";
 import { isLoggedin } from "src/utils/login";
 import FooterForContent from "../Layout/FooterForContent/FooterForContent";
+import { updateNumTotalComments } from "src/db/totalData";
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -182,6 +183,9 @@ const EachBean = () => {
 
         addRatingAndCommentOnBeanContent(_beanContent.uuid, comments, commentedUsers, ratings, avgRatingString, numReviews);
         addCommentOnAccount(userUUID, [...userComments, commentContent]);
+
+        // add +1 to numTotalComments()
+        updateNumTotalComments();
 
         // deep copy a comment
         const _comment = `${comment}`;
