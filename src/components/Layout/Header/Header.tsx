@@ -41,6 +41,7 @@ const Header = (props: { children: any; window: any }) => {
   const [isSignupOrLoginClicked, setIsSignupOrLoginClicked] = useState(false);
 
   const [modalOpen, setModalOpen] = useState(false);
+  const [addbeanModalOpen, setAddBeanModalOpen] = useState(false);
 
   const userEmail = localStorage?.getItem("userEmail") ?? "";
   const userFirstName = localStorage?.getItem("userFirstname") ?? "";
@@ -54,7 +55,7 @@ const Header = (props: { children: any; window: any }) => {
   };
 
   const handleAddBeanClick = (): void => {
-    isLoggedin(userEmail, userUUID) ? navigate(BaseRoutes.Add_Bean) : setIsSignupOrLoginClicked(true);
+    userEmail === "echoi3@alumni.nd.edu" ? navigate(BaseRoutes.Add_Bean) : handleAddBeanModalOpen();
   };
 
   const handleSignupOrLoginClick = () => {
@@ -79,6 +80,14 @@ const Header = (props: { children: any; window: any }) => {
 
   const handleModalClose = () => {
     setModalOpen(false);
+  };
+
+  const handleAddBeanModalOpen = () => {
+    setAddBeanModalOpen(true);
+  };
+
+  const handleAddBeanModalClose = () => {
+    setAddBeanModalOpen(false);
   };
 
   return (
@@ -302,6 +311,36 @@ const Header = (props: { children: any; window: any }) => {
             </li>
             <br />
             <div className={styles.text}>Can't wait to get to know you and collect your feedback! :)</div>
+          </div>
+        </div>
+      </Modal>
+      <Modal open={addbeanModalOpen} onClose={handleAddBeanModalClose}>
+        <div className={styles.modalWrapper}>
+          <CloseIcon onClick={handleAddBeanModalClose} style={{ position: "absolute", top: "3%", right: "2%" }} />
+
+          <div className={styles.modalBody}>
+            <Typography className={styles.modalHeader}>Please contact Eric to list your amazing beans:</Typography>
+            <br />
+            <li>
+              1. Talk to Eric on{" "}
+              <a href="https://www.instagram.com/echoi33/" target="_blank">
+                Instagram
+              </a>
+            </li>
+            <li>
+              2. Talk to Eric on{" "}
+              <a href="https://twitter.com/echoi333" target="_blank">
+                Twitter
+              </a>
+            </li>
+            <li>
+              3. Email to{" "}
+              <a href={`mailto:echoi3@alumni.nd.edu`} target="_blank">
+                echoi3@alumni.nd.edu
+              </a>
+            </li>
+            <br />
+            <div className={styles.text}>Can't wait to get to know you and help your business grow! :)</div>
           </div>
         </div>
       </Modal>
