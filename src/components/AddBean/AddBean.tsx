@@ -16,6 +16,7 @@ import { uploadToS3 } from "src/db/s3";
 import { BaseRoutes } from "src/routes/constants";
 import { createCompany, getAllCompanies } from "src/db/company";
 import FooterForContent from "../Layout/FooterForContent/FooterForContent";
+import { updateNumTotalBeanContents, updateNumTotalCompanies } from "src/db/totalData";
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -190,9 +191,13 @@ const AddBean = () => {
       uploadImageToServer(file as File);
       createBeanContent(beanContent);
 
+      // add +1 to numTotalBeanContents
+      updateNumTotalBeanContents();
+
       const allCompanies = await getAllCompanies();
       if (!allCompanies.includes(companyName)) {
         await createCompany({ companyName });
+        updateNumTotalCompanies();
       }
 
       setTimeout(() => {
