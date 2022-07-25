@@ -6,6 +6,11 @@
     margin: 0 auto;
     max-width: var(--page-shell-max-content-width, 1440px);
     padding-bottom: 50px;
+    padding-top: 20px;
+
+    @media screen and (max-width: 599px) {
+      padding-top: 25px;
+    }
 
     @media screen and (min-width: 300px) {
       padding-left: var(--ic-zlb-s);

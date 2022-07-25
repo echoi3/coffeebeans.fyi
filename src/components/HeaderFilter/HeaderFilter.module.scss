@@ -1,10 +1,16 @@
 ._wrapper {
-  height: 78px;
+  margin-top: -10px;
+  height: 90px;
   width: 100%;
   z-index: 100;
   --header_brand-color: var(--ihf-tp-q);
   background-color: #fff;
-  box-shadow: rgb(0 0 0 / 8%) 0 1px 0;
+
+  @media screen and (max-width: 599px) {
+    margin-top: -25px;
+    box-shadow: rgb(0 0 0 / 8%) 0 1px 0;
+    height: 74px;
+  }
   ._content_wrapper {
     display: flex;
     align-items: center;
@@ -13,6 +19,7 @@
 
     margin: 0 auto;
     max-width: var(--page-shell-max-content-width, 1440px);
+
     @media screen and (min-width: 300px) {
       padding-left: var(--ic-zlb-s);
       padding-right: var(--ic-zlb-s);
