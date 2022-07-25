@@ -3,6 +3,9 @@ import { Stack, Typography } from "@mui/material";
 import React from "react";
 import styles from "./SingleBox.module.scss";
 
+import StarRateIcon from "@mui/icons-material/StarRate";
+import RateReviewIcon from "@mui/icons-material/RateReview";
+
 interface IProps {
   data: any;
 }
@@ -10,7 +13,8 @@ interface IProps {
 const SingleBox: React.FunctionComponent<IProps> = ({ data }) => {
   return (
     <Stack direction="column" className={styles._wrapper}>
-      <img src={data?.image} alt="filter" style={{ width: "25px", height: "25px" }} />
+      {/* <img src={data?.image} alt="filter" style={{ width: "25px", height: "25px" }} /> */}
+      {data?.title === "Top Rated" ? <StarRateIcon /> : <RateReviewIcon />}
       {/* <Image
         src={data?.image}
         alt="filter"

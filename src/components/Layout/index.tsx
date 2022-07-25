@@ -27,8 +27,7 @@ const Layout: React.FunctionComponent<IProps> = ({ children }) => {
         {" "}
       </Box>
 
-      {/* 
-      <Box sx={{ mt: 2 }}>
+      {/* <Box sx={{ mt: 2 }}>
         <HeaderFilter />
       </Box> */}
       <main>
