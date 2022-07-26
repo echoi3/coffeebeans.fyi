@@ -55,7 +55,9 @@ const Header = (props: { children: any; window: any }) => {
   };
 
   const handleAddBeanClick = (): void => {
-    userEmail === "echoi3@alumni.nd.edu" ? navigate(BaseRoutes.Add_Bean) : handleAddBeanModalOpen();
+    // userEmail === "echoi3@alumni.nd.edu" ? navigate(BaseRoutes.Add_Bean) : handleAddBeanModalOpen();
+
+    isLoggedin(userEmail, userUUID) ? navigate(BaseRoutes.Add_Bean) : setIsSignupOrLoginClicked(true);
   };
 
   const handleSignupOrLoginClick = () => {
